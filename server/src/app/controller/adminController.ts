@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { BcryptService } from "../../utils/bcryptService";
-import { AdminSignUpUseCase } from "../../domain/useCases/adminSignUpUseCase";
+import { AdminSignUpUseCase } from "../../domain/useCases/admin/adminSignUpUseCase";
 import { AdminRepository } from "../../domain/repositories.ts/adminRepo";
-import { AdminLoginUseCase } from "../../domain/useCases/adminLoginUseCase";
+import { AdminLoginUseCase } from "../../domain/useCases/admin/adminLoginUsecase";
 
 const adminRepository = new AdminRepository();
 const bcryptService = new BcryptService();

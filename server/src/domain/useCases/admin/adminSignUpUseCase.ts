@@ -1,6 +1,6 @@
-import { BcryptService } from "../../utils/bcryptService";
-import { IAdmin, ISignUpData } from "../entities/admin";
-import { AdminRepository } from "../repositories.ts/adminRepo";
+import { BcryptService } from "../../../utils/bcryptService";
+import { IAdmin, ISignUpData } from "../../entities/admin";
+import { AdminRepository } from "../../repositories.ts/adminRepo";
 
 export class AdminSignUpUseCase {
   constructor(

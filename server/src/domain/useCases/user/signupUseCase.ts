@@ -1,6 +1,6 @@
-import { BcryptService } from "../../utils/bcryptService";
-import { ISignUpData, IUser } from "../entities/user";
-import { UserRepository } from "../repositories.ts/userRepo";
+import { BcryptService } from "../../../utils/bcryptService";
+import { ISignUpData, IUser } from "../../entities/user";
+import { UserRepository } from "../../repositories.ts/userRepo";
 
 export class SignUpUseCase {
   constructor(

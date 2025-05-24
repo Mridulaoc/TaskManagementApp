@@ -1,7 +1,7 @@
-import { BcryptService } from "../../utils/bcryptService";
-import { generateToken } from "../../utils/jwtService";
-import { ILoginData, ILoginResponse } from "../entities/user";
-import { UserRepository } from "../repositories.ts/userRepo";
+import { BcryptService } from "../../../utils/bcryptService";
+import { generateToken } from "../../../utils/jwtService";
+import { ILoginData, ILoginResponse } from "../../entities/user";
+import { UserRepository } from "../../repositories.ts/userRepo";
 
 export class LoginUseCase {
   constructor(
@@ -16,7 +16,10 @@ export class LoginUseCase {
       loginData.password,
       user.password
     );
-    const token = generateToken(user._id.toString());
+    const token = generateToken({
+      userId: user._id.toString(),
+      email: user.email,
+    });
     return {
       message: "Login Successfull",
       token,

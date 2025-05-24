@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
 import { UserRepository } from "../../domain/repositories.ts/userRepo";
-import { SignUpUseCase } from "../../domain/useCases/signUpUseCase";
+import { SignUpUseCase } from "../../domain/useCases/user/signupUseCase";
 import { generateToken } from "../../utils/jwtService";
 import { BcryptService } from "../../utils/bcryptService";
-import { LoginUseCase } from "../../domain/useCases/loginUsecase";
+import { LoginUseCase } from "../../domain/useCases/user/loginUsecase";
 
 const userRepository = new UserRepository();
 const bcryptService = new BcryptService();
