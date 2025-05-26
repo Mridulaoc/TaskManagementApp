@@ -15,4 +15,14 @@ export class UserRepository {
     const user = new User(data);
     return await user.save();
   }
+
+  async findAll(): Promise<IUser[] | null> {
+    try {
+      const users = await User.find();
+      if (!users) return null;
+      return users;
+    } catch (error) {
+      throw new Error("Could not fetch users");
+    }
+  }
 }

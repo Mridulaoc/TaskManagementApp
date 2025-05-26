@@ -1,5 +1,9 @@
 import express from "express";
-import { adminLogin, adminSignUp } from "../app/controller/adminController";
+import {
+  adminLogin,
+  adminSignUp,
+  getAllUsers,
+} from "../app/controller/adminController";
 import { adminMiddleware } from "../app/middleware/adminMiddleware";
 import {
   createTask,
@@ -13,6 +17,8 @@ const adminRouter = express.Router();
 
 adminRouter.post("/signup", adminSignUp);
 adminRouter.post("/login", adminLogin);
+
+adminRouter.get("/users", adminMiddleware, getAllUsers);
 
 adminRouter
   .route("/task/:taskId")

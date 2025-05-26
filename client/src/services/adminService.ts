@@ -6,6 +6,7 @@ import type {
   ISignUpData,
   ISignUpResponse,
 } from "../interfaces/admin";
+import { IUser } from "../interfaces/user";
 
 export const adminService = {
   signUp: async (
@@ -22,5 +23,10 @@ export const adminService = {
   ): Promise<AxiosResponse<ILoginResponse>> => {
     const response = await adminApi.post("/login", loginData);
     return response;
+  },
+
+  fetchAllUsers: async (): Promise<AxiosResponse<IUser[]>> => {
+    const response = await adminApi.get("/users");
+    return response.data;
   },
 };

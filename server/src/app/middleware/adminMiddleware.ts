@@ -2,6 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { IAdmin } from "../../domain/entities/admin";
 import jwt from "jsonwebtoken";
 
+declare global {
+  namespace Express {
+    interface Request {
+      admin?: IAdmin;
+    }
+  }
+}
+
 const SECRET_KEY = process.env.JWT_SECRET_KEY || "your_secret_key";
 
 interface JwtPayloadExtended extends jwt.JwtPayload {

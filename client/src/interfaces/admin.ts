@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export interface IAdmin {
   name: string;
   email: string;
@@ -9,6 +11,7 @@ export interface IAdminState {
   error: string | null;
   token: string | null;
   isAuthenticated: boolean;
+  users: IUser[];
 }
 
 export interface ISignUpData {
