@@ -31,6 +31,7 @@ export interface ITaskInitialState {
   error: string | null;
   task: ITask;
   tasks: ITask[];
+  userTasks: ITask[];
   total: number;
   page: number;
   limit: number;

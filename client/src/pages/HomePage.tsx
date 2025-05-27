@@ -10,7 +10,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <h1 className="p-4 font-semibold text-center text-2xl">User Login</h1>
       <div className="bg-white rounded shadow-lg w-full max-w-md">
         <div className="flex border-b">

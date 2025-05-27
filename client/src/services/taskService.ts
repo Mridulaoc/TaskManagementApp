@@ -9,13 +9,13 @@ import type {
   IUpdateTaskData,
   IUpdateTaskResponse,
 } from "../interfaces/task";
-import { adminApi } from "../api";
+import { adminApi, userApi } from "../api";
 
 export const taskService = {
   fetchTasks: async (
     params: IFetchTasksInput
   ): Promise<AxiosResponse<IFetchTasksResponse>> => {
-    const response = await adminApi.get("/tasks", { params });
+    const response = await adminApi.get("/get-tasks", { params });
     return response;
   },
   addTask: async (
@@ -41,6 +41,11 @@ export const taskService = {
     taskId: string
   ): Promise<AxiosResponse<IDeleteTaskResponse>> => {
     const response = await adminApi.delete(`/task/${taskId}`);
+    return response;
+  },
+
+  fetchUserTasks: async (userId: string): Promise<AxiosResponse<ITask[]>> => {
+    const response = await userApi.get(`/${userId}/tasks`);
     return response;
   },
 };

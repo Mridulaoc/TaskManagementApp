@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Task from "../../models/taskModel";
 import { ITask, ITaskData } from "../entities/task";
 
@@ -18,11 +19,13 @@ export class TaskRepository {
   ): Promise<{ tasks: ITask[]; total: number }> {
     try {
       const skip = (page - 1) * limit;
+
       const tasks = await Task.find()
         .populate("assignedTo", "name email")
         .skip(skip)
         .limit(limit);
       const total = await Task.countDocuments();
+
       return { tasks, total };
     } catch (error) {
       throw new Error("Could not fetch Tasks");
@@ -55,6 +58,19 @@ export class TaskRepository {
       return result !== null;
     } catch (error) {
       throw new Error("Could not delete the task");
+    }
+  }
+
+  async findUserTasks(userId: string): Promise<ITask[]> {
+    try {
+      const userTasks = await Task.find({
+        assignedTo: new mongoose.Types.ObjectId(userId),
+      });
+      if (!userTasks) return [];
+      console.log("Tasks from repo:", userTasks);
+      return userTasks;
+    } catch (error) {
+      throw new Error("Could not fetch tasks for the user");
     }
   }
 }

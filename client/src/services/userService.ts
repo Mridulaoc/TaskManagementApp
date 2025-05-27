@@ -1,6 +1,7 @@
 import type { AxiosResponse } from "axios";
 import { userApi } from "../api";
 import type {
+  IAuthRestoreResponse,
   ILoginData,
   ILoginResponse,
   ISignUpData,
@@ -19,6 +20,11 @@ export const userService = {
     loginData: ILoginData
   ): Promise<AxiosResponse<ILoginResponse>> => {
     const response = await userApi.post("/login", loginData);
+    return response;
+  },
+
+  verifyToken: async (): Promise<AxiosResponse<IAuthRestoreResponse>> => {
+    const response = await userApi.get("/verify-token");
     return response;
   },
 };

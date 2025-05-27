@@ -24,6 +24,7 @@ export class LoginUseCase {
       message: "Login Successfull",
       token,
       userId: user._id.toString(),
+      user,
     };
   }
 }

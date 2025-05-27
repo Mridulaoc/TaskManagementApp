@@ -32,6 +32,7 @@ const initialState: ITaskInitialState = {
     ],
   },
   tasks: [],
+  userTasks: [],
   total: 0,
   page: 0,
   limit: 0,
@@ -106,6 +107,19 @@ export const deleteTask = createAsyncThunk<
 >("task/deleteTask", async (taskId: string, { rejectWithValue }) => {
   try {
     const response = await taskService.deleteTask(taskId);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(handleAsyncThunkError(error));
+  }
+});
+
+export const fetchUserTasks = createAsyncThunk<
+  ITask[],
+  string,
+  { rejectValue: { message: string } }
+>("task/fetchUserTasks", async (userId: string, { rejectWithValue }) => {
+  try {
+    const response = await taskService.fetchUserTasks(userId);
     return response.data;
   } catch (error) {
     return rejectWithValue(handleAsyncThunkError(error));
@@ -198,6 +212,15 @@ const taskSlice = createSlice({
         const deletedTaskId = action.meta.arg;
         state.tasks = state.tasks.filter((task) => task._id !== deletedTaskId);
         state.total = Math.max(0, state.total - 1);
+      })
+      // fetch user tasks
+      .addCase(fetchUserTasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserTasks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userTasks = action.payload;
       });
   },
 });

@@ -2,6 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { verifyToken, JwtPayloadExtended } from "../../utils/jwtService";
 import { IUser } from "../../domain/entities/user";
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
 export const authMiddleware = async (
   req: Request,
   res: Response,

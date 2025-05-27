@@ -24,6 +24,8 @@ export const adminMiddleware = async (
   try {
     const authHeader = req.headers.authorization;
 
+    console.log("authheader:", authHeader);
+
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       res
         .status(401)

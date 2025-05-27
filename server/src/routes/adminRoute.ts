@@ -19,7 +19,7 @@ adminRouter.post("/signup", adminSignUp);
 adminRouter.post("/login", adminLogin);
 
 adminRouter.get("/users", getAllUsers);
-adminRouter.get("/tasks", getAllTasks);
+adminRouter.get("/get-tasks", adminMiddleware, getAllTasks);
 
 adminRouter
   .route("/task/:taskId")

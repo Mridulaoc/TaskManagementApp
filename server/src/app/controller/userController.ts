@@ -38,3 +38,21 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     });
   }
 };
+
+export const verifyToken = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    res.status(200).json({
+      user: {
+        userId: req.user?._id,
+        email: req.user?.email,
+        name: req.user?.name,
+      },
+      message: "Token is valid",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Token is invalid" });
+  }
+};

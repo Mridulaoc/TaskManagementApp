@@ -19,7 +19,7 @@ adminApi.interceptors.request.use((config) => {
 });
 
 userApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("jwtToken");
+  const token = localStorage.getItem("userToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
