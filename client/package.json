@@ -22,6 +22,7 @@
     "react-router-dom": "^7.6.0",
     "react-toast": "^1.0.3",
     "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.1",
     "zod": "^3.25.17"
   },
   "devDependencies": {

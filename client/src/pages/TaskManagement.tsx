@@ -43,7 +43,9 @@ export function TaskManagement() {
       await dispatch(deleteTask(taskToDelete));
       toast.success("Task deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete task");
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     } finally {
       setShowDeleteModal(false);
       setTaskToDelete(null);

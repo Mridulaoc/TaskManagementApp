@@ -4,6 +4,8 @@ import cors, { CorsOptions } from "cors";
 import connectDB from "./config/db";
 import userRouter from "./routes/userRoute";
 import adminRouter from "./routes/adminRoute";
+import { createServer } from "http";
+import { initializeSocket } from "./services/socketService";
 
 dotenv.config();
 connectDB();
@@ -25,4 +27,6 @@ app.use("/", userRouter);
 app.use("/admin", adminRouter);
 
 const PORT = process.env.PORT || 3000;
+const server = createServer(app);
+initializeSocket(server);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

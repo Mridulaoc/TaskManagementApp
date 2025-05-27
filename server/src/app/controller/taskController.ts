@@ -5,9 +5,14 @@ import { DeleteTaskUseCase } from "../../domain/useCases/task/deleteTaskUseCase"
 import { GetAllTasksUseCase } from "../../domain/useCases/task/getAllTasksUseCase";
 import { GetTaskUseCase } from "../../domain/useCases/task/getTaskUseCase";
 import { UpdateTaskUseCase } from "../../domain/useCases/task/updateTaskUseCase";
+import { SocketNotificationService } from "../../infrastructure/services/SocketNotificationService";
 
 const taskRepository = new TaskRepository();
-const createTaskUseCase = new CreateTaskUseCase(taskRepository);
+const notificationService = new SocketNotificationService();
+const createTaskUseCase = new CreateTaskUseCase(
+  taskRepository,
+  notificationService
+);
 const getAllTasksUseCase = new GetAllTasksUseCase(taskRepository);
 const getTaskUseCase = new GetTaskUseCase(taskRepository);
 const updateTaskUceCase = new UpdateTaskUseCase(taskRepository);
