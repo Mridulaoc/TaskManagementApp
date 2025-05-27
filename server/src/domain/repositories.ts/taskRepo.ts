@@ -12,11 +12,18 @@ export class TaskRepository {
     }
   }
 
-  async findAllTasks(): Promise<ITask[] | null> {
+  async findAllTasks(
+    page: number,
+    limit: number
+  ): Promise<{ tasks: ITask[]; total: number }> {
     try {
-      const tasks = await Task.find().populate("assignedTo", "name email");
-
-      return tasks;
+      const skip = (page - 1) * limit;
+      const tasks = await Task.find()
+        .populate("assignedTo", "name email")
+        .skip(skip)
+        .limit(limit);
+      const total = await Task.countDocuments();
+      return { tasks, total };
     } catch (error) {
       throw new Error("Could not fetch Tasks");
     }

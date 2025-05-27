@@ -38,7 +38,7 @@ export default function Login() {
       const resultAdmin = await dispatch(adminLogin(data));
       if (loginUser.fulfilled.match(resultAdmin)) {
         toast.success(resultAdmin.payload.message);
-        navigate("/admin/dashboard");
+        navigate("/admin/dashboard/tasks");
       } else {
         toast.error(resultAdmin.payload!.message);
       }

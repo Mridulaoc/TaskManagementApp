@@ -31,8 +31,10 @@ export const getAllTasks = async (
   res: Response
 ): Promise<void> => {
   try {
-    const tasks = await getAllTasksUseCase.execute();
-    res.status(200).json(tasks);
+    const page = parseInt(req.params.page) || 1;
+    const limit = parseInt(req.params.limit) || 5;
+    const result = await getAllTasksUseCase.execute(page, limit);
+    res.status(200).json(result);
   } catch (error) {
     if (error instanceof Error) res.status(500).json({ error: error.message });
   }

@@ -3,10 +3,13 @@ import { TaskRepository } from "../../repositories.ts/taskRepo";
 
 export class GetAllTasksUseCase {
   constructor(private taskRepository: TaskRepository) {}
-  async execute(): Promise<ITask[] | null> {
+  async execute(
+    page: number,
+    limit: number
+  ): Promise<{ tasks: ITask[]; total: number }> {
     try {
-      const tasks = await this.taskRepository.findAllTasks();
-      return tasks;
+      const result = await this.taskRepository.findAllTasks(page, limit);
+      return result;
     } catch (error) {
       throw new Error("Could not fetch tasks");
     }

@@ -5,10 +5,11 @@ import type { AppDispatch, RootState } from "../store/store";
 
 // import { toast } from "react-toastify";
 import moment from "moment";
-import { fetchAllTasks } from "../features/taskSlice";
+import { deleteTask, fetchAllTasks } from "../features/taskSlice";
+import { toast } from "react-toast";
 
 export function TaskManagement() {
-  // const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 5;
@@ -21,33 +22,33 @@ export function TaskManagement() {
 
   useEffect(() => {
     dispatch(fetchAllTasks({ page, limit }));
-  }, [dispatch, page]);
+  }, [dispatch, page, total]);
 
   const handleAddTask = () => {
     navigate("/admin/dashboard/tasks/add");
   };
 
   const handleEditTask = (taskId: string) => {
-    navigate(`/tasks/edit/${taskId}`);
+    navigate(`/admin/dashboard/tasks/edit/${taskId}`);
   };
 
   const handleDeleteClick = (taskId: string) => {
-    // setTaskToDelete(taskId);
+    setTaskToDelete(taskId);
     setShowDeleteModal(true);
   };
 
-  // const confirmDelete = async () => {
-  //   if (!taskToDelete) return;
-  //   try {
-  //     await dispatch(deleteTask(taskToDelete));
-  //     toast.success("Task deleted successfully");
-  //   } catch (error) {
-  //     toast.error("Failed to delete task");
-  //   } finally {
-  //     setShowDeleteModal(false);
-  //     setTaskToDelete(null);
-  //   }
-  // };
+  const confirmDelete = async () => {
+    if (!taskToDelete) return;
+    try {
+      await dispatch(deleteTask(taskToDelete));
+      toast.success("Task deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete task");
+    } finally {
+      setShowDeleteModal(false);
+      setTaskToDelete(null);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -81,33 +82,43 @@ export function TaskManagement() {
               </tr>
             </thead>
             <tbody>
-              {tasks.map((task) => (
-                <tr key={task._id} className="border-t">
-                  <td className="py-2 px-4">{task.title}</td>
-                  <td className="py-2 px-4 capitalize">{task.status}</td>
-                  <td className="py-2 px-4 capitalize">{task.priority}</td>
-                  <td className="py-2 px-4">
-                    {task.dueDate ? moment(task.dueDate).format("LL") : "--"}
-                  </td>
-                  <td className="py-2 px-4">
-                    {moment(task.createdAt).format("LL")}
-                  </td>
-                  <td className="py-2 px-4 flex justify-center gap-2">
-                    <button
-                      onClick={() => handleEditTask(task._id!)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(task._id!)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
+              {tasks && tasks.length > 0 ? (
+                tasks.map((task) => (
+                  <tr key={task._id} className="border-t">
+                    <td className="py-2 px-4">{task.title}</td>
+                    <td className="py-2 px-4 capitalize">{task.status}</td>
+                    <td className="py-2 px-4 capitalize">{task.priority}</td>
+                    <td className="py-2 px-4">
+                      {task.dueDate ? moment(task.dueDate).format("LL") : "--"}
+                    </td>
+                    <td className="py-2 px-4">
+                      {task.createdAt
+                        ? moment(task.createdAt).format("LL")
+                        : "--"}
+                    </td>
+                    <td className="py-2 px-4 flex justify-center gap-2">
+                      <button
+                        onClick={() => handleEditTask(task._id!)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(task._id!)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-gray-500">
+                    No tasks found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -172,12 +183,12 @@ export function TaskManagement() {
               >
                 Cancel
               </button>
-              {/* <button
+              <button
                 onClick={confirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded"
               >
                 Delete
-              </button> */}
+              </button>
             </div>
           </div>
         </div>

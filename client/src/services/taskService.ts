@@ -1,5 +1,14 @@
 import type { AxiosResponse } from "axios";
-import type { IFetchTasksInput, IFetchTasksResponse } from "../interfaces/task";
+import type {
+  IAddTaskResponse,
+  IDeleteTaskResponse,
+  IFetchTasksInput,
+  IFetchTasksResponse,
+  ITask,
+  ITaskFormInput,
+  IUpdateTaskData,
+  IUpdateTaskResponse,
+} from "../interfaces/task";
 import { adminApi } from "../api";
 
 export const taskService = {
@@ -7,6 +16,31 @@ export const taskService = {
     params: IFetchTasksInput
   ): Promise<AxiosResponse<IFetchTasksResponse>> => {
     const response = await adminApi.get("/tasks", { params });
+    return response;
+  },
+  addTask: async (
+    submissionData: ITaskFormInput
+  ): Promise<AxiosResponse<IAddTaskResponse>> => {
+    const response = await adminApi.post("/task", submissionData);
+    return response;
+  },
+  fetchTask: async (taskId: string): Promise<AxiosResponse<ITask>> => {
+    const response = await adminApi.get(`/task/${taskId}`);
+    return response;
+  },
+
+  updatetask: async (
+    taskId: string,
+    taskData: IUpdateTaskData
+  ): Promise<AxiosResponse<IUpdateTaskResponse>> => {
+    const response = await adminApi.put(`/task/${taskId}`, taskData);
+    return response.data;
+  },
+
+  deleteTask: async (
+    taskId: string
+  ): Promise<AxiosResponse<IDeleteTaskResponse>> => {
+    const response = await adminApi.delete(`/task/${taskId}`);
     return response;
   },
 };

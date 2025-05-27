@@ -1,32 +1,30 @@
 import axios from "axios";
 
 const adminApi = axios.create({
-  // baseURL: "`${import.meta.env.VITE_API_BASE_URL}/admin`",
-  // withCredentials: true,
-  baseURL: "http://localhost:3000/admin",
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/admin`,
+  withCredentials: true,
 });
 
 const userApi = axios.create({
-  // baseURL: import.meta.env.VITE_API_BASE_URL,
-  // withCredentials: true,
-  baseURL: "http://localhost:3000",
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
+  withCredentials: true,
 });
-// adminApi.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("adminToken");
+adminApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem("adminToken");
 
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-// userApi.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("jwtToken");
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+userApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem("jwtToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 // const generalErrorInterceptor = (error: unknown) => {};
 

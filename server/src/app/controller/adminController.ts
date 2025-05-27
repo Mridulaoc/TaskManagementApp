@@ -54,6 +54,7 @@ export const getAllUsers = async (
 ): Promise<void> => {
   try {
     const users = await fetchAllUsersUseCase.execute();
+    console.log(users);
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Could not fetch users" });

@@ -27,6 +27,6 @@ export const adminService = {
 
   fetchAllUsers: async (): Promise<AxiosResponse<IUser[]>> => {
     const response = await adminApi.get("/users");
-    return response.data;
+    return response;
   },
 };
