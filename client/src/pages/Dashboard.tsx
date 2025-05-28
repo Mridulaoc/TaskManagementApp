@@ -13,6 +13,7 @@ import TaskCard from "../components/TaskCard";
 import { AppDispatch, RootState } from "../store/store";
 import { useSocket } from "../context/socketContext";
 import { ITask } from "../interfaces/task";
+import { addNotification } from "../features/notificationSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,18 +36,50 @@ const Dashboard = () => {
     if (socket && isAuthenticated) {
       socket.on("task:created", (newTask: ITask) => {
         dispatch(addNewTaskRealTime(newTask));
+        dispatch(
+          addNotification({
+            type: "task_created",
+            message: `New task "${newTask.title}" has been assigned to you`,
+            taskId: newTask._id,
+            taskTitle: newTask.title,
+          })
+        );
       });
       socket.on("task:updated", (updatedTask: ITask) => {
         dispatch(updateTaskRealTime(updatedTask));
+        dispatch(
+          addNotification({
+            type: "task_updated",
+            message: `Task "${updatedTask.title}" has been updated`,
+            taskId: updatedTask._id,
+            taskTitle: updatedTask.title,
+          })
+        );
       });
 
       socket.on("task:deleted", (data: { taskId: string }) => {
         dispatch(removeTaskRealTime(data));
+        dispatch(
+          addNotification({
+            type: "task_deleted",
+            message: `A task has been deleted`,
+            taskId: data.taskId,
+          })
+        );
       });
       socket.on(
         "subtask:updated",
         (data: { taskId: string; subtaskId: string; isCompleted: boolean }) => {
           dispatch(updateSubtaskRealtime(data));
+          dispatch(
+            addNotification({
+              type: "subtask_updated",
+              message: `A subtask has been ${
+                data.isCompleted ? "completed" : "reopened"
+              }`,
+              taskId: data.taskId,
+            })
+          );
         }
       );
       socket.on(
@@ -56,6 +89,13 @@ const Dashboard = () => {
           status: "pending" | "in-progress" | "completed";
         }) => {
           dispatch(updateTaskStatusRealtime(data));
+          dispatch(
+            addNotification({
+              type: "task_status_updated",
+              message: `Task status changed to ${data.status}`,
+              taskId: data.taskId,
+            })
+          );
         }
       );
       socket.on("connected", (data) => {
@@ -70,7 +110,7 @@ const Dashboard = () => {
         socket.off("connected");
       };
     }
-  });
+  }, [socket, isAuthenticated, dispatch]);
 
   if (loading) {
     return (
