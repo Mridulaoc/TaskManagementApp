@@ -1,4 +1,3 @@
-import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
@@ -6,9 +5,10 @@ import { AppDispatch, RootState } from "../store/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchAllUsers } from "../features/adminSlice";
-import { toast } from "react-toast";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchTask, updateTask } from "../features/taskSlice";
+import { useFieldArray, useForm } from "react-hook-form";
 
 const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -31,7 +31,6 @@ type taskFormData = z.infer<typeof taskSchema>;
 
 export default function EditTaskForm() {
   const { taskId } = useParams<{ taskId: string }>();
-
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -44,7 +43,7 @@ export default function EditTaskForm() {
     watch,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -154,9 +153,9 @@ export default function EditTaskForm() {
 
   if (taskLoading) {
     return (
-      <div className="max-w-2xl mx-auto mt-10 p-6 border rounded shadow bg-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <div className="max-w-3xl mx-auto mt-10 p-8 bg-white rounded-xl shadow-md font-['Poppins']">
+        <div className="flex flex-col items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3BB7F4]"></div>
           <p className="mt-4 text-gray-600">Loading task data...</p>
         </div>
       </div>
@@ -165,14 +164,34 @@ export default function EditTaskForm() {
 
   if (!task && !taskLoading) {
     return (
-      <div className="max-w-2xl mx-auto mt-10 p-6 border rounded shadow bg-white">
-        <div className="text-center">
-          <p className="text-red-600 text-lg">Task not found</p>
+      <div className="max-w-3xl mx-auto mt-10 p-8 bg-white rounded-xl shadow-md font-['Poppins']">
+        <div className="text-center py-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-16 w-16 mx-auto text-red-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+          <h3 className="text-xl font-bold text-gray-800 mt-4">
+            Task not found
+          </h3>
+          <p className="text-gray-600 mt-2">
+            The task you're trying to edit doesn't exist or may have been
+            deleted.
+          </p>
           <button
             onClick={() => navigate("/admin/dashboard")}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="mt-6 px-6 py-2 bg-[#11154F] text-white rounded-lg hover:bg-[#0a0d3a] transition-colors"
           >
-            Back to Tasks
+            Back to Dashboard
           </button>
         </div>
       </div>
@@ -180,110 +199,148 @@ export default function EditTaskForm() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 border rounded shadow bg-white">
-      <h2 className="text-2xl font-bold mb-6 text-center">Edit Task</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <div className="max-w-3xl mx-auto my-6 md:my-10 p-6 md:p-8 bg-white rounded-xl shadow-md font-['Poppins']">
+      <h2 className="text-xl md:text-2xl font-semibold text-[#11154F] mb-2 text-center">
+        Edit Task
+      </h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}
         <div>
-          <label className="block font-semibold mb-1">Title</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Title <span className="text-red-500">*</span>
+          </label>
           <input
             {...register("title")}
-            className="w-full border px-3 py-2 rounded outline-blue-400"
+            className={`w-full px-4 py-3 rounded-lg border ${
+              errors.title ? "border-red-500" : "border-gray-300"
+            } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition`}
           />
           {errors.title && (
-            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
           )}
         </div>
 
         {/* Description */}
         <div>
-          <label className="block font-semibold mb-1">Description</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Description
+          </label>
           <textarea
             {...register("description")}
-            className="w-full border px-3 py-2 rounded outline-blue-400"
-            rows={3}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition"
+            rows={4}
           />
         </div>
 
-        {/* Status */}
-        <div>
-          <label className="block font-semibold mb-1">Status</label>
-          <select
-            {...register("status")}
-            className="w-full border px-3 py-2 rounded outline-blue-400"
-          >
-            <option value="pending">Pending</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
-          </select>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Status */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Status
+            </label>
+            <select
+              {...register("status")}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none"
+            >
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
 
-        {/* Priority */}
-        <div>
-          <label className="block font-semibold mb-1">Priority</label>
-          <select
-            {...register("priority")}
-            className="w-full border px-3 py-2 rounded outline-blue-400"
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
+          {/* Priority */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Priority
+            </label>
+            <select
+              {...register("priority")}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
         </div>
 
         {/* Due Date */}
         <div>
-          <label className="block font-semibold mb-1">Due Date</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Due Date
+          </label>
           <input
             type="date"
             {...register("dueDate")}
-            className="w-full border px-3 py-2 rounded outline-blue-400"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none"
           />
         </div>
 
         {/* Assigned Users */}
         <div className="relative">
-          <label className="block font-semibold mb-1">Assigned Users</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Assigned Users <span className="text-red-500">*</span>
+          </label>
           <div
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="w-full border px-3 py-2 rounded outline-blue-400 cursor-pointer flex justify-between items-center"
+            className={`w-full px-4 py-3 rounded-lg border ${
+              errors.assignedTo ? "border-red-500" : "border-gray-300"
+            } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none cursor-pointer flex justify-between items-center`}
           >
-            <span>
+            <span className="text-gray-700">
               {assignedTo.length > 0
                 ? `${assignedTo.length} user(s) selected`
                 : "Select users"}
             </span>
-            <span>{dropdownOpen ? "▲" : "▼"}</span>
+            <svg
+              className={`h-5 w-5 text-gray-400 transition-transform ${
+                dropdownOpen ? "rotate-180" : ""
+              }`}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
 
           {dropdownOpen && (
-            <div className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg max-h-60 overflow-auto">
+            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
               {loading ? (
-                <div className="p-2 text-center">Loading users...</div>
+                <div className="p-3 text-center text-gray-500">
+                  Loading users...
+                </div>
               ) : users.length === 0 ? (
-                <div className="p-2 text-center">No users available</div>
+                <div className="p-3 text-center text-gray-500">
+                  No users available
+                </div>
               ) : (
                 users.map((user) => (
                   <div
                     key={user._id}
-                    className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
+                    className="flex items-center p-3 hover:bg-gray-50 cursor-pointer"
                     onClick={() => handleUserToggle(user._id!)}
                   >
                     <input
                       type="checkbox"
                       checked={assignedTo.includes(user._id!)}
                       onChange={() => handleUserToggle(user._id!)}
-                      className="mr-2 cursor-pointer"
+                      className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     />
-                    <span>{user.name}</span>
+                    <span className="ml-3 text-gray-700">{user.name}</span>
                   </div>
                 ))
               )}
             </div>
           )}
           {errors.assignedTo && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="mt-1 text-sm text-red-600">
               {errors.assignedTo.message}
             </p>
           )}
@@ -291,58 +348,98 @@ export default function EditTaskForm() {
 
         {/* Subtasks */}
         <div>
-          <label className="block font-semibold mb-1">Subtasks</label>
-          {fields.map((field, index) => (
-            <div
-              key={field.id}
-              className="flex items-center gap-2 mb-2 sm:flex-row flex-col"
-            >
-              <div className="flex items-center gap-2 flex-1">
-                <input
-                  type="checkbox"
-                  {...register(`subtasks.${index}.isCompleted`)}
-                  className="cursor-pointer"
-                />
-                <input
-                  {...register(`subtasks.${index}.title`)}
-                  placeholder="Subtask title"
-                  className="flex-1 border px-3 py-2 rounded outline-blue-400"
-                />
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Subtasks
+          </label>
+          <div className="space-y-3">
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex items-start gap-3">
+                <div className="flex items-center h-full">
+                  <input
+                    type="checkbox"
+                    {...register(`subtasks.${index}.isCompleted`)}
+                    className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    {...register(`subtasks.${index}.title`)}
+                    placeholder="Enter subtask title"
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      errors.subtasks?.[index]?.title
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none`}
+                  />
+                  {errors.subtasks?.[index]?.title && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.subtasks?.[index]?.title?.message}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => remove(index)}
+                  className="p-2 text-red-500 hover:text-red-700 rounded-full hover:bg-red-50 transition-colors"
+                  disabled={fields.length === 1}
+                  title="Remove subtask"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => remove(index)}
-                className="text-red-500 hover:underline text-sm"
-                disabled={fields.length === 1}
-              >
-                ✕ Remove
-              </button>
-            </div>
-          ))}
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => append({ title: "", isCompleted: false })}
-            className="text-blue-500 hover:underline text-sm mt-2"
+            className="mt-3 flex items-center text-[#3BB7F4] hover:text-[#2a9bd8] transition-colors"
           >
-            + Add Subtask
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Add Subtask
           </button>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row justify-end gap-4 pt-6">
           <button
             type="button"
             onClick={() => navigate("/admin/dashboard")}
-            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition"
+            className="px-6 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-            disabled={taskLoading}
+            disabled={isSubmitting}
+            className="px-6 py-2 bg-[#11154F] text-white font-medium rounded-lg hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {taskLoading ? "Updating..." : "Update Task"}
+            Update Task
           </button>
         </div>
       </form>

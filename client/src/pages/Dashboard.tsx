@@ -114,31 +114,39 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        <span className="ml-3 text-gray-600">Loading tasks...</span>
+      <div className="flex flex-col items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3BB7F4]"></div>
+        <span className="mt-4 text-gray-600 font-['Poppins']">
+          Loading your tasks...
+        </span>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6 lg:p-8 font-['Poppins']">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">My Tasks</h1>
-        <div className="flex items-center space-x-4">
-          <div className="text-sm text-gray-500">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div>
+          <h1 className="text-xl md:text-2xl font-semibold text-[#11154F]">
+            My Tasks
+          </h1>
+        </div>
+
+        <div className="flex items-center space-x-4 mt-4 md:mt-0">
+          <div className="bg-[#11154F]/10 text-[#11154F] px-3 py-1 rounded-full text-sm">
             {userTasks.length} task{userTasks.length !== 1 ? "s" : ""}
           </div>
-          {/* Socket connection status indicator */}
+
+          {/* Connection status */}
           <div className="flex items-center">
             <div
               className={`w-2 h-2 rounded-full mr-2 ${
-                socket?.connected ? "bg-green-500" : "bg-red-500"
+                socket?.connected ? "bg-green-500 animate-pulse" : "bg-red-500"
               }`}
             ></div>
             <span className="text-xs text-gray-500">
-              {socket?.connected ? "Live" : "Offline"}
+              {socket?.connected ? "Live updates" : "Offline"}
             </span>
           </div>
         </div>
@@ -146,14 +154,29 @@ const Dashboard = () => {
 
       {/* Error Display */}
       {error && (
-        <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <div className="flex justify-between items-center">
-            <span>Error: {error}</span>
+        <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="text-sm font-medium text-red-800">Error</h3>
+              <p className="text-sm text-red-700 mt-1">{error}</p>
+            </div>
             <button
               onClick={() => dispatch(clearError())}
               className="text-red-500 hover:text-red-700"
             >
-              ✕
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -161,20 +184,41 @@ const Dashboard = () => {
 
       {/* Tasks Grid */}
       {userTasks.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-500 text-lg">No tasks assigned yet</div>
-          <div className="text-gray-400 text-sm mt-2">
-            New tasks will appear here automatically when assigned
-          </div>
+        <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+          <h3 className="mt-2 text-lg font-medium text-gray-900">
+            No tasks assigned
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">
+            You'll see tasks here when they're assigned to you.
+          </p>
           {socket?.connected && (
-            <div className="text-green-500 text-sm mt-2 flex items-center justify-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-              Connected to real-time updates
+            <div className="mt-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              <svg
+                className="-ml-1 mr-1.5 h-2 w-2 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 8 8"
+              >
+                <circle cx="4" cy="4" r="3" />
+              </svg>
+              Receiving live updates
             </div>
           )}
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {userTasks.map((task) => (
             <TaskCard
               key={task._id}

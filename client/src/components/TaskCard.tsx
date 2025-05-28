@@ -1,35 +1,9 @@
-// import { ITask } from "../interfaces/task";
-
-// const TaskCard = ({
-//   task,
-//   isAuthenticated,
-// }: {
-//   task: ITask;
-//   isAuthenticated: boolean;
-// }) => {
-//   return (
-//     isAuthenticated && (
-//       <div className="border p-4 rounded-xl shadow-md bg-white">
-//         <h2 className="text-xl font-semibold">{task.title}</h2>
-//         <p className="text-gray-600">{task.description}</p>
-//         <div className="flex justify-between mt-2">
-//           <span className="text-sm text-blue-500">Status: {task.status}</span>
-//           <span className="text-sm text-red-500">
-//             Priority: {task.priority}
-//           </span>
-//         </div>
-//       </div>
-//     )
-//   );
-// };
-
-// export default TaskCard;
-
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ITask, ISubTask } from "../interfaces/task";
 import { AppDispatch } from "../store/store";
 import { updateSubtaskStatus, updateTaskStatus } from "../features/taskSlice";
+import { IoClose, IoCheckmarkCircle } from "react-icons/io5";
 
 const TaskCard = ({
   task,
@@ -91,26 +65,26 @@ const TaskCard = ({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "completed":
-        return "text-green-500";
+        return "bg-green-100 text-green-800";
       case "in-progress":
-        return "text-blue-500";
+        return "bg-blue-100 text-blue-800";
       case "pending":
-        return "text-yellow-500";
+        return "bg-yellow-100 text-yellow-800";
       default:
-        return "text-gray-500";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "text-red-500";
+        return "bg-red-100 text-red-800";
       case "medium":
-        return "text-orange-500";
+        return "bg-orange-100 text-orange-800";
       case "low":
-        return "text-green-500";
+        return "bg-green-100 text-green-800";
       default:
-        return "text-gray-500";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -118,26 +92,41 @@ const TaskCard = ({
     task.subtasks?.filter((st) => st.isCompleted).length || 0;
   const totalSubtasks = task.subtasks?.length || 0;
 
+  if (!isAuthenticated) return null;
+
   return (
-    isAuthenticated && (
-      <>
-        <div className="border p-4 rounded-xl shadow-md bg-white hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
-          <p className="text-gray-600 mb-3 line-clamp-2">
-            {task.description || "No description"}
+    <>
+      {/* Task Card */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
+        <div className="p-5">
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+              {task.title}
+            </h3>
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(
+                task.priority || "medium"
+              )}`}
+            >
+              {task.priority || "medium"}
+            </span>
+          </div>
+
+          <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+            {task.description || "No description provided"}
           </p>
 
           {totalSubtasks > 0 && (
-            <div className="mb-3">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-sm text-gray-500">Progress</span>
-                <span className="text-sm text-gray-500">
-                  {completedSubtasks}/{totalSubtasks}
+            <div className="mb-4">
+              <div className="flex justify-between text-xs text-gray-500 mb-1">
+                <span>Progress</span>
+                <span>
+                  {completedSubtasks}/{totalSubtasks} completed
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-blue-500 h-2 rounded-full transition-all"
+                  className="bg-[#3BB7F4] h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${
                       totalSubtasks > 0
@@ -150,111 +139,120 @@ const TaskCard = ({
             </div>
           )}
 
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center">
             <span
-              className={`text-sm font-medium ${getStatusColor(task.status)}`}
-            >
-              Status: {task.status}
-            </span>
-            <span
-              className={`text-sm font-medium ${getPriorityColor(
-                task.priority || "medium"
+              className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                task.status
               )}`}
             >
-              Priority: {task.priority || "medium"}
+              {task.status.replace("-", " ")}
             </span>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-sm font-medium text-[#11154F] hover:text-[#3BB7F4] transition-colors"
+            >
+              View details →
+            </button>
           </div>
-
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
-          >
-            View Details
-          </button>
         </div>
+      </div>
 
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    {task.title}
-                  </h2>
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="text-gray-500 hover:text-gray-700 text-2xl"
-                  >
-                    ×
-                  </button>
-                </div>
+      {/* Task Details Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            {/* Background overlay */}
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
 
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Description</h3>
-                  <p className="text-gray-600 mb-4">
-                    {task.description || "No description provided"}
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Status:
-                      </span>
+            {/* Modal container */}
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+              <div className="bg-white px-6 py-4">
+                {/* Modal header */}
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-2xl font-bold text-[#11154F]">
+                      {task.title}
+                    </h3>
+                    <div className="flex items-center space-x-3 mt-2">
                       <span
-                        className={`ml-2 font-semibold ${getStatusColor(
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
                           task.status
                         )}`}
                       >
-                        {task.status}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Priority:
+                        {task.status.replace("-", " ")}
                       </span>
                       <span
-                        className={`ml-2 font-semibold ${getPriorityColor(
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(
                           task.priority || "medium"
                         )}`}
                       >
-                        {task.priority || "medium"}
+                        {task.priority || "medium"} priority
                       </span>
                     </div>
                   </div>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-gray-400 hover:text-gray-500 p-1 rounded-full hover:bg-gray-100"
+                  >
+                    <IoClose className="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
 
-                  {task.dueDate && (
-                    <div className="mb-4">
-                      <span className="text-sm font-medium text-gray-500">
-                        Due Date:
-                      </span>
-                      <span className="ml-2 text-gray-700">
-                        {new Date(task.dueDate).toLocaleDateString()}
-                      </span>
-                    </div>
-                  )}
+              {/* Modal content */}
+              <div className="px-6 py-4 space-y-6">
+                {/* Description */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Description
+                  </h4>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <p className="text-gray-700">
+                      {task.description || "No description provided"}
+                    </p>
+                  </div>
                 </div>
 
+                {/* Due Date */}
+                {task.dueDate && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">
+                      Due Date
+                    </h4>
+                    <p className="text-gray-700">
+                      {new Date(task.dueDate).toLocaleDateString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+                )}
+
+                {/* Subtasks */}
                 {task.subtasks && task.subtasks.length > 0 && (
                   <div>
                     <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-semibold">
-                        Subtasks ({completedSubtasks}/{totalSubtasks})
-                      </h3>
+                      <h4 className="text-sm font-medium text-gray-700">
+                        Subtasks ({completedSubtasks}/{totalSubtasks} completed)
+                      </h4>
                       <div className="text-sm text-gray-500">
-                        {totalSubtasks > 0
-                          ? `${Math.round(
-                              (completedSubtasks / totalSubtasks) * 100
-                            )}% Complete`
-                          : "0% Complete"}
+                        {Math.round((completedSubtasks / totalSubtasks) * 100)}%
+                        complete
                       </div>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {task.subtasks.map((subtask: ISubTask) => (
                         <div
                           key={subtask._id}
-                          className="flex items-center p-3 border rounded-lg hover:bg-gray-50"
+                          className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200"
                         >
                           <input
                             type="checkbox"
@@ -265,45 +263,43 @@ const TaskCard = ({
                                 e.target.checked
                               )
                             }
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-3"
+                            className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
                           />
-                          <div className="flex-1">
-                            <span
-                              className={`${
+                          <div className="ml-3 flex-1">
+                            <p
+                              className={`text-sm ${
                                 subtask.isCompleted
                                   ? "line-through text-gray-500"
-                                  : "text-gray-800"
+                                  : "text-gray-700"
                               }`}
                             >
                               {subtask.title}
-                            </span>
+                            </p>
                           </div>
                           {subtask.isCompleted && (
-                            <span className="text-green-500 text-sm font-medium">
-                              ✓ Complete
-                            </span>
+                            <IoCheckmarkCircle className="h-5 w-5 text-green-500" />
                           )}
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
+              </div>
 
-                {/* Close Button */}
-                <div className="mt-6 pt-4 border-t">
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors"
-                  >
-                    Close
-                  </button>
-                </div>
+              {/* Modal footer */}
+              <div className="bg-gray-50 px-6 py-4 flex justify-end">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-[#11154F] text-white rounded-md hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
-        )}
-      </>
-    )
+        </div>
+      )}
+    </>
   );
 };
 

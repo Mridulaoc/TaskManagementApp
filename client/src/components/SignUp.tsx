@@ -5,14 +5,14 @@ import type { ISignUpData } from "../interfaces/user";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store/store";
 import { signupUser } from "../features/userSlice";
-import { toast } from "react-toast";
+import { toast } from "react-toastify";
 import { adminSignUp } from "../features/adminSlice";
 
 const signupSchema = z.object({
   name: z
     .string()
-    .min(5, { message: "Name must be atleast 5 characters" })
-    .max(50, { message: "Name must be less tahn 50 characters" }),
+    .min(5, { message: "Name must be at least 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" }),
   email: z.string().email("Invalid email").nonempty("Email is required"),
   password: z
     .string()
@@ -35,7 +35,7 @@ export default function SignUp({ onSignupSuccess }: ISignUpProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<signupFormData>({
     resolver: zodResolver(signupSchema),
   });
@@ -75,38 +75,103 @@ export default function SignUp({ onSignupSuccess }: ISignUpProps) {
       }
     }
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 border rounded shadow"
+      className="w-full max-w-md p-6 md:p-8 bg-white rounded-xl shadow-md font-['Poppins']"
     >
-      <h2 className="text-xl font-bold mb-4">Signup</h2>
-      <div>
-        <label>Name:</label>
-        <input {...register("name")} className="border px-2 py-1 w-full" />
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-      </div>
-      <div>
-        <label>Email:</label>
-        <input {...register("email")} className="border px-2 py-1 w-full" />
-        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-      </div>
-      <div>
-        <label>Password:</label>
+      <h2 className="text-xl font-semibold text-[#11154F] mb-2 text-center">
+        Create Your Account
+      </h2>
+
+      {/* Name Field */}
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Full Name <span className="text-red-500">*</span>
+        </label>
         <input
-          type="password"
-          {...register("password")}
-          className="border px-2 py-1 w-full"
+          {...register("name")}
+          type="text"
+          placeholder="Enter your full name"
+          className={`w-full px-4 py-3 rounded-lg border ${
+            errors.name ? "border-red-500" : "border-gray-300"
+          } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition text-sm`}
         />
-        {errors.password && (
-          <p className="text-red-500">{errors.password.message}</p>
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
         )}
       </div>
+
+      {/* Email Field */}
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Email Address <span className="text-red-500">*</span>
+        </label>
+        <input
+          {...register("email")}
+          type="email"
+          placeholder="Enter your email"
+          className={`w-full px-4 py-3 rounded-lg border ${
+            errors.email ? "border-red-500" : "border-gray-300"
+          } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition text-sm`}
+        />
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+        )}
+      </div>
+
+      {/* Password Field */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Password <span className="text-red-500">*</span>
+        </label>
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="Create a password"
+          className={`w-full px-4 py-3 rounded-lg border ${
+            errors.password ? "border-red-500" : "border-gray-300"
+          } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition text-sm`}
+        />
+        {errors.password && (
+          <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+        )}
+      </div>
+
+      {/* Submit Button */}
       <button
         type="submit"
-        className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
+        disabled={isSubmitting}
+        className="w-full py-3 px-4 bg-[#11154F] hover:bg-[#0a0d3a] text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] disabled:opacity-70 disabled:cursor-not-allowed"
       >
-        Signup
+        {isSubmitting ? (
+          <span className="flex items-center justify-center">
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Creating account...
+          </span>
+        ) : (
+          "Sign Up"
+        )}
       </button>
     </form>
   );

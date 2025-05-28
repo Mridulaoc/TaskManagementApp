@@ -10,39 +10,47 @@ export default function AdminHome() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="p-4 font-semibold text-center text-2xl">Admin Login</h1>
-      <div className="bg-white rounded shadow-lg w-full max-w-md">
-        <div className="flex border-b">
-          <button
-            className={`w-1/2 py-2 text-center font-semibold ${
-              activeTab === "login"
-                ? "border-b-2 border-blue-500 text-blue-600"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("login")}
-          >
-            Login
-          </button>
-          <button
-            className={`w-1/2 py-2 text-center font-semibold ${
-              activeTab === "signup"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("signup")}
-          >
-            Signup
-          </button>
+    <div className="  from-[#11154F]/5 to-[#3BB7F4]/5 font-['Poppins'] flex items-center justify-center p-4 md:p-8">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <p className="text-gray-600">Admin Dashboard</p>
         </div>
 
-        {/* Form content */}
-        <div className="p-6">
-          {activeTab === "login" ? (
-            <Login />
-          ) : (
-            <SignUp onSignupSuccess={handleSignupSuccess} />
-          )}
+        {/* Auth Card */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          {/* Tabs */}
+          <div className="flex">
+            <button
+              className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${
+                activeTab === "login"
+                  ? "text-[#11154F] border-b-2 border-[#11154F]"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("login")}
+            >
+              Login
+            </button>
+            <button
+              className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${
+                activeTab === "signup"
+                  ? "text-[#11154F] border-b-2 border-[#11154F]"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              }`}
+              onClick={() => setActiveTab("signup")}
+            >
+              Sign Up
+            </button>
+          </div>
+
+          {/* Form Content */}
+          <div className="p-6 md:p-8">
+            {activeTab === "login" ? (
+              <Login />
+            ) : (
+              <SignUp onSignupSuccess={handleSignupSuccess} />
+            )}
+          </div>
         </div>
       </div>
     </div>

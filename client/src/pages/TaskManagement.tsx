@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
 import moment from "moment";
 import { deleteTask, fetchAllTasks } from "../features/taskSlice";
-import { toast } from "react-toast";
+import { toast } from "react-toastify";
 import { ISubTask, ITask } from "../interfaces/task";
 import { useSocket } from "../context/socketContext";
 import StatusChart from "../components/StatusChart";
