@@ -14,8 +14,11 @@ export const initializeSocket = (server: Server): void => {
   });
 
   io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
     try {
+      const token = socket.handshake.auth.token;
+      if (!token) {
+        return next(new Error("Authentication error"));
+      }
       const decoded = verifyToken(token);
       socket.data.userId = decoded.userId;
       next();
@@ -39,4 +42,23 @@ export const getIO = (): SocketServer => {
     throw new Error("Socket.io not initialized!");
   }
   return io;
+};
+
+export const emitToUsers = (
+  userIds: string[],
+  event: string,
+  data: any
+): void => {
+  if (!io) {
+    console.error("Socket.io not initialized!");
+    return;
+  }
+  try {
+    userIds.forEach((userId) => {
+      const roomName = `user:${userId}`;
+      io.to(roomName).emit(event, data);
+    });
+  } catch (error) {
+    console.error(` Failed to emit event '${event}' to users:`, error);
+  }
 };

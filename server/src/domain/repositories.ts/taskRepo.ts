@@ -6,8 +6,12 @@ export class TaskRepository {
   async create(data: ITaskData): Promise<ITask | null> {
     try {
       const task = new Task(data);
-      task.save();
-      return task;
+      const savedTask = await task.save();
+      const populatedTask = await Task.findById(savedTask._id).populate(
+        "assignedTo",
+        "name,email"
+      );
+      return populatedTask;
     } catch (error) {
       throw new Error("Could not create Task");
     }
@@ -65,7 +69,7 @@ export class TaskRepository {
     try {
       const userTasks = await Task.find({
         assignedTo: new mongoose.Types.ObjectId(userId),
-      });
+      }).sort({ createdAt: -1 });
       if (!userTasks) return [];
       console.log("Tasks from repo:", userTasks);
       return userTasks;

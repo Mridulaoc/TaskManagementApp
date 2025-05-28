@@ -18,13 +18,23 @@ const createTaskUseCase = new CreateTaskUseCase(
 );
 const getAllTasksUseCase = new GetAllTasksUseCase(taskRepository);
 const getTaskUseCase = new GetTaskUseCase(taskRepository);
-const updateTaskUceCase = new UpdateTaskUseCase(taskRepository);
-const deleteTaskUseCase = new DeleteTaskUseCase(taskRepository);
+const updateTaskUceCase = new UpdateTaskUseCase(
+  taskRepository,
+  notificationService
+);
+const deleteTaskUseCase = new DeleteTaskUseCase(
+  taskRepository,
+  notificationService
+);
 const getUserTasksUseCase = new GetUserTasksUseCase(taskRepository);
 const updateSubTaskStatusUseCase = new UpdateSubtaskStatusUseCase(
-  taskRepository
+  taskRepository,
+  notificationService
 );
-const updateTaskStatusUseCase = new UpdateTaskStatusUseCase(taskRepository);
+const updateTaskStatusUseCase = new UpdateTaskStatusUseCase(
+  taskRepository,
+  notificationService
+);
 
 export const createTask = async (
   req: Request,
@@ -33,7 +43,7 @@ export const createTask = async (
   try {
     const taskData = req.body;
     const task = await createTaskUseCase.execute(taskData);
-    res.status(200).json({ message: "Task created successfully" });
+    res.status(200).json({ message: "Task created successfully", task });
   } catch (error) {
     if (error instanceof Error) res.status(500).json({ error: error.message });
   }

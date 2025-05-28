@@ -7,12 +7,15 @@ import store from "./store/store.ts";
 // import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toast";
+import { SocketProvider } from "./context/socketContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <ToastContainer position="top-right" />
-      <App />
+      <SocketProvider>
+        <ToastContainer position="top-right" />
+        <App />
+      </SocketProvider>
     </Provider>
   </StrictMode>
 );

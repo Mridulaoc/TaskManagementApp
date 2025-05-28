@@ -1,13 +1,84 @@
 import { ITask } from "../../domain/entities/task";
-import { getIO } from "../../services/socketService";
+import { IUser } from "../../domain/entities/user";
+import { emitToUsers, getIO } from "../../services/socketService";
 
 export class SocketNotificationService {
-  async notifyTaskCreated(task: ITask): Promise<void> {
-    const io = getIO();
+  private extractUserIds(task: Partial<ITask>): string[] {
+    if (!task.assignedTo || task.assignedTo.length === 0) return [];
 
-    // Notify all assigned users
-    task.assignedTo?.forEach((userId) => {
-      io.to(`user:${userId}`).emit("task:created", task);
-    });
+    return task.assignedTo.map((user: string | IUser) =>
+      typeof user === "string" ? user : user._id.toString()
+    );
+  }
+
+  async notifyTaskCreated(task: ITask): Promise<void> {
+    try {
+      const userIds = this.extractUserIds(task);
+      if (userIds.length > 0) {
+        emitToUsers(userIds, "task:created", task);
+      }
+    } catch (error) {
+      console.error(" Failed to send task creation notification:", error);
+    }
+  }
+
+  async notifyTaskUpdated(updatedTask: Partial<ITask>): Promise<void> {
+    try {
+      const userIds = this.extractUserIds(updatedTask);
+      if (userIds.length > 0) {
+        emitToUsers(userIds, "task:updated", updatedTask);
+      }
+    } catch (error) {
+      console.error(" Failed to send task updation notification:", error);
+    }
+  }
+
+  async notifyTaskDeleted(task: ITask) {
+    try {
+      const userIds = this.extractUserIds(task);
+      if (userIds.length > 0) {
+        emitToUsers(userIds, "task:deleted", { taskId: task._id });
+      }
+    } catch (error) {
+      console.error(" Failed to send task deletion notification:", error);
+    }
+  }
+
+  async notifySubtaskUpdated(
+    taskId: string,
+    subtaskId: string,
+    isCompleted: boolean,
+    task: Partial<ITask>
+  ): Promise<void> {
+    try {
+      const userIds = this.extractUserIds(task);
+      if (userIds.length > 0) {
+        emitToUsers(userIds, "subtask:updated", {
+          taskId,
+          subtaskId,
+          isCompleted,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to send subtask update notification:", error);
+    }
+  }
+
+  async notifyTaskStatusUpdated(
+    taskId: string,
+    status: "pending" | "in-progress" | "completed",
+    task: Partial<ITask>
+  ): Promise<void> {
+    try {
+      const userIds = this.extractUserIds(task);
+      if (userIds.length > 0) {
+        emitToUsers(userIds, "task:status:updated", {
+          taskId,
+          status,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to send task status update notification:", error);
+    }
   }
 }

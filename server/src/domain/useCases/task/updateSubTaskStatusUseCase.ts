@@ -1,3 +1,4 @@
+import { SocketNotificationService } from "../../../infrastructure/services/SocketNotificationService";
 import { ITask } from "../../entities/task";
 import { TaskRepository } from "../../repositories.ts/taskRepo";
 
@@ -8,7 +9,10 @@ export interface UpdateSubtaskStatusRequest {
 }
 
 export class UpdateSubtaskStatusUseCase {
-  constructor(private taskRepository: TaskRepository) {}
+  constructor(
+    private taskRepository: TaskRepository,
+    private notificationService: SocketNotificationService
+  ) {}
 
   async execute(request: UpdateSubtaskStatusRequest): Promise<ITask> {
     const { taskId, subtaskId, isCompleted } = request;
@@ -26,6 +30,13 @@ export class UpdateSubtaskStatusUseCase {
       taskId,
       subtaskId,
       isCompleted
+    );
+
+    await this.notificationService.notifySubtaskUpdated(
+      taskId,
+      subtaskId,
+      isCompleted,
+      updatedTask
     );
 
     return updatedTask;

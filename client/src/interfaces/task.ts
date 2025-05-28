@@ -52,6 +52,7 @@ export interface ITaskFormInput {
 
 export interface IAddTaskResponse {
   message: string;
+  task: ITask;
 }
 
 export interface IUpdateTaskData {

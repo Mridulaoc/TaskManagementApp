@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { taskService } from "../services/taskService";
 import { handleAsyncThunkError } from "../utils/errorHandling";
 import {
@@ -165,7 +165,129 @@ export const updateTaskStatus = createAsyncThunk<
 const taskSlice = createSlice({
   name: "task",
   initialState,
-  reducers: {},
+  reducers: {
+    addNewTaskRealTime: (state, action: PayloadAction<ITask>) => {
+      const newTask = action.payload;
+      const existingTaskIndex = state.userTasks.findIndex(
+        (task) => task._id === newTask._id
+      );
+
+      if (existingTaskIndex === -1) {
+        state.userTasks.unshift(newTask);
+      }
+    },
+
+    updateTaskRealTime: (state, action: PayloadAction<ITask>) => {
+      const updatedTask = action.payload;
+      const userTaskIndex = state.userTasks.findIndex(
+        (task) => task._id === updatedTask._id
+      );
+      if (userTaskIndex !== -1) {
+        state.userTasks = [
+          ...state.userTasks.slice(0, userTaskIndex),
+          { ...updatedTask },
+          ...state.userTasks.slice(userTaskIndex + 1),
+        ];
+      }
+
+      const taskIndex = state.tasks.findIndex(
+        (task) => task._id === updatedTask._id
+      );
+      if (taskIndex !== -1) {
+        state.tasks = [
+          ...state.tasks.slice(0, taskIndex),
+          { ...updatedTask },
+          ...state.tasks.slice(taskIndex + 1),
+        ];
+      }
+      if (state.task._id === updatedTask._id) {
+        state.task = updatedTask;
+      }
+    },
+
+    removeTaskRealTime: (state, action: PayloadAction<{ taskId: string }>) => {
+      const { taskId } = action.payload;
+
+      state.userTasks = state.userTasks.filter((task) => task._id !== taskId);
+
+      state.tasks = state.tasks.filter((task) => task._id !== taskId);
+
+      state.total = Math.max(0, state.total - 1);
+
+      console.log("Task removed:", taskId);
+    },
+
+    updateSubtaskRealtime: (
+      state,
+      action: PayloadAction<{
+        taskId: string;
+        subtaskId: string;
+        isCompleted: boolean;
+      }>
+    ) => {
+      const { taskId, subtaskId, isCompleted } = action.payload;
+
+      const userTaskIndex = state.userTasks.findIndex(
+        (task) => task._id === taskId
+      );
+
+      if (userTaskIndex !== -1 && state.userTasks[userTaskIndex].subtasks) {
+        const subtaskIndex = state.userTasks[userTaskIndex].subtasks!.findIndex(
+          (subtask) => subtask._id === subtaskId
+        );
+
+        if (subtaskIndex !== -1) {
+          state.userTasks[userTaskIndex].subtasks![subtaskIndex].isCompleted =
+            isCompleted;
+        }
+      }
+
+      if (state.task._id === taskId && state.task.subtasks) {
+        const subtaskIndex = state.task.subtasks.findIndex(
+          (subtask) => subtask._id === subtaskId
+        );
+
+        if (subtaskIndex !== -1) {
+          state.task.subtasks[subtaskIndex].isCompleted = isCompleted;
+        }
+      }
+    },
+
+    updateTaskStatusRealtime: (
+      state,
+      action: PayloadAction<{
+        taskId: string;
+        status: "pending" | "in-progress" | "completed";
+      }>
+    ) => {
+      const { taskId, status } = action.payload;
+
+      const userTaskIndex = state.userTasks.findIndex(
+        (task) => task._id === taskId
+      );
+
+      if (userTaskIndex !== -1) {
+        state.userTasks[userTaskIndex].status = status;
+      }
+
+      const taskIndex = state.tasks.findIndex((task) => task._id === taskId);
+
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex].status = status;
+      }
+
+      if (state.task._id === taskId) {
+        state.task.status = status;
+      }
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // fetch all tasks
@@ -305,5 +427,13 @@ const taskSlice = createSlice({
       });
   },
 });
-
+export const {
+  addNewTaskRealTime,
+  updateTaskRealTime,
+  removeTaskRealTime,
+  updateSubtaskRealtime,
+  updateTaskStatusRealtime,
+  clearError,
+  setLoading,
+} = taskSlice.actions;
 export default taskSlice.reducer;
