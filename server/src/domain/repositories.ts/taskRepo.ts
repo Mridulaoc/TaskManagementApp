@@ -38,7 +38,7 @@ export class TaskRepository {
 
   async findById(id: string): Promise<ITask | null> {
     try {
-      const task = await Task.findById(id);
+      const task = await Task.findById(id).populate("assignedTo", "name,email");
 
       return task;
     } catch (error) {

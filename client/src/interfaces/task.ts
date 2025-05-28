@@ -1,9 +1,11 @@
+import { IUser } from "./user";
+
 export interface ITask {
   _id?: string;
   title: string;
   description?: string;
   status: "pending" | "in-progress" | "completed";
-  assignedTo: string[];
+  assignedTo: string[] | IUser[];
   dueDate?: Date;
   priority: "low" | "medium" | "high";
   subtasks?: ISubTask[];

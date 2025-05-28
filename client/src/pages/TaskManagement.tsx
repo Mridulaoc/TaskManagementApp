@@ -204,22 +204,7 @@ import type { AppDispatch, RootState } from "../store/store";
 import moment from "moment";
 import { deleteTask, fetchAllTasks } from "../features/taskSlice";
 import { toast } from "react-toast";
-import { ITask } from "../interfaces/task";
-
-// // Define Task interface (adjust based on your actual task structure)
-// interface Task {
-//   _id: string;
-//   title: string;
-//   description?: string;
-//   status: string;
-//   priority: string;
-//   dueDate?: string;
-//   createdAt?: string;
-//   updatedAt?: string;
-//   assignedTo?: string;
-//   tags?: string[];
-//   category?: string;
-// }
+import { ISubTask, ITask } from "../interfaces/task";
 
 export function TaskManagement() {
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
@@ -248,6 +233,7 @@ export function TaskManagement() {
   };
 
   const handleViewTask = (task: ITask) => {
+    console.log(task);
     setTaskToView(task);
     setShowViewModal(true);
   };
@@ -300,7 +286,11 @@ export function TaskManagement() {
         return "text-gray-600 bg-gray-100";
     }
   };
-
+  const getCompletedSubtasks = (subtasks?: ISubTask[]) => {
+    if (!subtasks || subtasks.length === 0) return { completed: 0, total: 0 };
+    const completed = subtasks.filter((subtask) => subtask.isCompleted).length;
+    return { completed, total: subtasks.length };
+  };
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
@@ -399,6 +389,7 @@ export function TaskManagement() {
 
       {total > limit && (
         <div className="flex justify-center items-center flex-wrap gap-2 mt-4">
+          {/* Previous Button */}
           <button
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             disabled={page === 1}
@@ -411,6 +402,7 @@ export function TaskManagement() {
             ← Prev
           </button>
 
+          {/* Page Numbers */}
           {Array.from({ length: Math.ceil(total / limit) }, (_, i) => (
             <button
               key={i + 1}
@@ -425,6 +417,7 @@ export function TaskManagement() {
             </button>
           ))}
 
+          {/* Next Button */}
           <button
             onClick={() =>
               setPage((prev) => Math.min(prev + 1, Math.ceil(total / limit)))
@@ -465,7 +458,6 @@ export function TaskManagement() {
                   {taskToView.title}
                 </p>
               </div>
-
               {/* Description */}
               {taskToView.description && (
                 <div>
@@ -477,7 +469,6 @@ export function TaskManagement() {
                   </p>
                 </div>
               )}
-
               {/* Status and Priority Row */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -505,7 +496,6 @@ export function TaskManagement() {
                   </span>
                 </div>
               </div>
-
               {/* Dates Row */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -531,7 +521,6 @@ export function TaskManagement() {
                   </p>
                 </div>
               </div>
-
               {/* Updated At */}
               {taskToView.updatedAt && (
                 <div>
@@ -545,17 +534,73 @@ export function TaskManagement() {
                   </p>
                 </div>
               )}
-
-              {/* Assigned To */}
-              {taskToView.assignedTo && (
+              Assigned To
+              {taskToView.assignedTo && taskToView.assignedTo.length > 0 && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Assigned To
                   </label>
-                  <p className="text-gray-800">{taskToView.assignedTo}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {taskToView.assignedTo.map((assignee, index) => {
+                      if (typeof assignee === "string") {
+                        return (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                          >
+                            User ID: {assignee}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                        >
+                          {assignee.name}
+                        </span>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
-
+              {/* Subtasks */}
+              {taskToView.subtasks && taskToView.subtasks.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Subtasks (
+                    {getCompletedSubtasks(taskToView.subtasks).completed}/
+                    {getCompletedSubtasks(taskToView.subtasks).total} completed)
+                  </label>
+                  <div className="space-y-2 bg-gray-50 p-3 rounded border max-h-48 overflow-y-auto">
+                    {taskToView.subtasks.map((subtask, index) => (
+                      <div
+                        key={subtask._id || index}
+                        className="flex items-center gap-2"
+                      >
+                        <span
+                          className={`w-4 h-4 rounded-full flex items-center justify-center text-xs ${
+                            subtask.isCompleted
+                              ? "bg-green-500 text-white"
+                              : "bg-gray-300 text-gray-600"
+                          }`}
+                        >
+                          {subtask.isCompleted ? "✓" : "○"}
+                        </span>
+                        <span
+                          className={`flex-1 ${
+                            subtask.isCompleted
+                              ? "line-through text-gray-500"
+                              : "text-gray-800"
+                          }`}
+                        >
+                          {subtask.title}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {/* Task ID */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -589,6 +634,7 @@ export function TaskManagement() {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-96">
