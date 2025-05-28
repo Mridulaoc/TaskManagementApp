@@ -11,6 +11,7 @@ export interface ITask {
   updatedAt?: Date;
 }
 export interface ISubTask {
+  _id?: string;
   title: string;
   isCompleted: boolean | undefined;
 }
@@ -35,6 +36,8 @@ export interface ITaskInitialState {
   total: number;
   page: number;
   limit: number;
+  updatingTaskStatus: boolean;
+  updatingSubtask: boolean;
 }
 
 export interface ITaskFormInput {
@@ -68,4 +71,23 @@ export interface IUpdateTaskResponse {
 
 export interface IDeleteTaskResponse {
   message: string;
+}
+
+export interface IUpdateSubTaskInput {
+  taskId: string;
+  subtaskId: string;
+  isCompleted: boolean;
+}
+
+export interface IUpdateSubTaskResponse {
+  taskId: string;
+  subtaskId: string;
+  isCompleted: boolean;
+  updatedTask: ITask;
+}
+
+export interface IUpdateTaskStatusResponse {
+  taskId: string;
+  status: "pending" | "in-progress" | "completed";
+  updatedTask: ITask;
 }

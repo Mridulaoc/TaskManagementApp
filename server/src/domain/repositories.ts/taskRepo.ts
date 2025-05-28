@@ -73,4 +73,50 @@ export class TaskRepository {
       throw new Error("Could not fetch tasks for the user");
     }
   }
+
+  async updateSubtaskStatus(
+    taskId: string,
+    subtaskId: string,
+    isCompleted: boolean
+  ): Promise<ITask> {
+    try {
+      const task = await Task.findById(taskId);
+      if (!task) {
+        throw new Error("Task not found");
+      }
+
+      const subtask = task.subtasks?.find(
+        (subtask) => subtask._id?.toString() === subtaskId
+      );
+      if (!subtask) {
+        throw new Error("Subtask not found");
+      }
+
+      subtask.isCompleted = isCompleted;
+      const updatedTask = await task.save();
+      return updatedTask;
+    } catch (error) {
+      throw new Error(`Failed to update subtask status: ${error}`);
+    }
+  }
+  async updateTaskStatus(
+    taskId: string,
+    status: "pending" | "in-progress" | "completed"
+  ): Promise<ITask> {
+    try {
+      const updatedTask = await Task.findByIdAndUpdate(
+        taskId,
+        { status },
+        { new: true }
+      );
+
+      if (!updatedTask) {
+        throw new Error("Task not found");
+      }
+
+      return updatedTask;
+    } catch (error) {
+      throw new Error(`Failed to update task status: ${error}`);
+    }
+  }
 }

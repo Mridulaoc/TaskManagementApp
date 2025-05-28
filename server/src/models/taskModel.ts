@@ -26,5 +26,23 @@ const TaskSchema = new Schema<ITask>(
   { timestamps: true }
 );
 
+TaskSchema.pre("save", function (next) {
+  if (this.subtasks && this.subtasks.length > 0) {
+    const completedSubtasks = this.subtasks.filter(
+      (st) => st.isCompleted
+    ).length;
+    const totalSubtasks = this.subtasks.length;
+
+    if (completedSubtasks === 0) {
+      this.status = "pending";
+    } else if (completedSubtasks === totalSubtasks) {
+      this.status = "completed";
+    } else {
+      this.status = "in-progress";
+    }
+  }
+  next();
+});
+
 const Task = mongoose.model<ITask>("Task", TaskSchema);
 export default Task;

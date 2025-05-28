@@ -9,10 +9,10 @@ import EditTaskForm from "./pages/EditTaskForm";
 import MainLayout from "./components/MainLayout";
 import { UserProtectedRoute } from "./components/ProtectedRoutes";
 import { restoreUserAuth } from "./features/userSlice";
-// import { restoreAdminAuth } from "./features/adminSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
 import { useEffect } from "react";
+import AdminLayout from "./components/AdminLayout";
 function App() {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -25,16 +25,6 @@ function App() {
         } catch (error) {
           console.error("Failed to restore user auth:", error);
           localStorage.removeItem("userToken");
-        }
-      }
-
-      const adminToken = localStorage.getItem("adminToken");
-      if (adminToken) {
-        try {
-          // dispatch(restoreAdminAuth({ token: adminToken }));
-        } catch (error) {
-          console.error("Failed to restore admin auth:", error);
-          localStorage.removeItem("adminToken");
         }
       }
     };
@@ -56,14 +46,16 @@ function App() {
             }
           />
         </Route>
-        <Route path="/admin" element={<AdminHome />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="admin/dashboard/tasks" element={<TaskManagement />} />
-        <Route path="admin/dashboard/tasks/add" element={<AddTaskForm />} />
-        <Route
-          path="admin/dashboard/tasks/edit/:taskId"
-          element={<EditTaskForm />}
-        />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminHome />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard/tasks" element={<TaskManagement />} />
+          <Route path="dashboard/tasks/add" element={<AddTaskForm />} />
+          <Route
+            path="dashboard/tasks/edit/:taskId"
+            element={<EditTaskForm />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

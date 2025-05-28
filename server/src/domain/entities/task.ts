@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 export interface ITask {
-  _id?: mongoose.Types.ObjectId;
+  _id?: string;
   title: string;
   description?: string;
   status: "pending" | "in-progress" | "completed";
-  assignedTo: mongoose.Types.ObjectId[] | string[];
+  assignedTo: string[];
   dueDate?: Date;
   priority: "low" | "medium" | "high";
   subtasks?: ISubTask[];
@@ -14,6 +14,7 @@ export interface ITask {
 }
 
 export interface ISubTask {
+  _id?: string;
   title: string;
   isCompleted: boolean;
 }

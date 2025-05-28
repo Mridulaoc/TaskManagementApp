@@ -1,19 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../features/userSlice";
 import { AppDispatch, RootState } from "../store/store";
-import { IoNotifications } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { logoutAdmin } from "../features/adminSlice";
 
-const Navbar = () => {
+const AdminNavbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { isAuthenticated } = useSelector((state: RootState) => state.admin);
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/");
+    dispatch(logoutAdmin());
+    navigate("/admin");
   };
 
   return (
@@ -24,15 +21,6 @@ const Navbar = () => {
 
       {isAuthenticated && (
         <div className="flex items-center gap-4">
-          <button
-            className="relative hover:text-gray-300"
-            aria-label="Notifications"
-          >
-            <IoNotifications />
-          </button>
-
-          <span className="hidden sm:inline">{user.name}</span>
-
           <button
             onClick={handleLogout}
             className="text-primary px-3 py-1 rounded hover:bg-blue-100"
@@ -45,4 +33,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default AdminNavbar;

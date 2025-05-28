@@ -9,8 +9,10 @@ import {
   ITask,
   ITaskFormInput,
   ITaskInitialState,
+  IUpdateSubTaskResponse,
   IUpdateTaskData,
   IUpdateTaskResponse,
+  IUpdateTaskStatusResponse,
 } from "../interfaces/task";
 
 const initialState: ITaskInitialState = {
@@ -33,6 +35,8 @@ const initialState: ITaskInitialState = {
   },
   tasks: [],
   userTasks: [],
+  updatingTaskStatus: false,
+  updatingSubtask: false,
   total: 0,
   page: 0,
   limit: 0,
@@ -126,6 +130,38 @@ export const fetchUserTasks = createAsyncThunk<
   }
 });
 
+export const updateSubtaskStatus = createAsyncThunk<
+  IUpdateSubTaskResponse,
+  { taskId: string; subtaskId: string; isCompleted: boolean },
+  { rejectValue: { message: string } }
+>(
+  "task/updateSubtaskStatus",
+  async ({ taskId, subtaskId, isCompleted }, { rejectWithValue }) => {
+    try {
+      const response = await taskService.updateSubtaskStatus(
+        taskId,
+        subtaskId,
+        isCompleted
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(handleAsyncThunkError(error));
+    }
+  }
+);
+
+export const updateTaskStatus = createAsyncThunk<
+  IUpdateTaskStatusResponse,
+  { taskId: string; status: "pending" | "in-progress" | "completed" },
+  { rejectValue: { message: string } }
+>("task/updateTaskStatus", async ({ taskId, status }, { rejectWithValue }) => {
+  try {
+    const response = await taskService.updateTaskStatus(taskId, status);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(handleAsyncThunkError(error));
+  }
+});
 const taskSlice = createSlice({
   name: "task",
   initialState,
@@ -221,6 +257,51 @@ const taskSlice = createSlice({
       .addCase(fetchUserTasks.fulfilled, (state, action) => {
         state.loading = false;
         state.userTasks = action.payload;
+      })
+      // update sub task status
+
+      .addCase(updateSubtaskStatus.pending, (state) => {
+        state.updatingSubtask = true;
+        state.error = null;
+      })
+      .addCase(updateSubtaskStatus.fulfilled, (state, action) => {
+        state.updatingSubtask = false;
+        const { taskId, subtaskId, isCompleted } = action.payload;
+        const taskIndex = state.userTasks.findIndex(
+          (task) => task._id === taskId
+        );
+        if (taskIndex !== -1 && state.userTasks[taskIndex].subtasks) {
+          const subtaskIndex = state.userTasks[taskIndex].subtasks!.findIndex(
+            (subtask) => subtask._id === subtaskId
+          );
+          if (subtaskIndex !== -1) {
+            state.userTasks[taskIndex].subtasks![subtaskIndex].isCompleted =
+              isCompleted;
+          }
+        }
+      })
+      .addCase(updateSubtaskStatus.rejected, (state, action) => {
+        state.updatingSubtask = false;
+        state.error = action.payload?.message || "Failed to update subtask";
+      })
+      // Update task status
+      .addCase(updateTaskStatus.pending, (state) => {
+        state.updatingTaskStatus = true;
+        state.error = null;
+      })
+      .addCase(updateTaskStatus.fulfilled, (state, action) => {
+        state.updatingTaskStatus = false;
+        const { taskId, status } = action.payload;
+        const taskIndex = state.userTasks.findIndex(
+          (task) => task._id === taskId
+        );
+        if (taskIndex !== -1) {
+          state.userTasks[taskIndex].status = status;
+        }
+      })
+      .addCase(updateTaskStatus.rejected, (state, action) => {
+        state.updatingTaskStatus = false;
+        state.error = action.payload?.message || "Failed to update task status";
       });
   },
 });

@@ -64,7 +64,13 @@ export const fetchAllUsers = createAsyncThunk<
 const adminSlice = createSlice({
   name: "admin",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutAdmin: (state) => {
+      state.token = null;
+      state.isAuthenticated = false;
+      localStorage.removeItem("adminToken");
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -90,6 +96,7 @@ const adminSlice = createSlice({
       .addCase(adminLogin.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
+        state.isAuthenticated = true;
       })
       .addCase(adminLogin.rejected, (state, action) => {
         state.loading = false;
@@ -111,5 +118,5 @@ const adminSlice = createSlice({
       });
   },
 });
-
+export const { logoutAdmin } = adminSlice.actions;
 export default adminSlice.reducer;

@@ -6,8 +6,10 @@ import type {
   IFetchTasksResponse,
   ITask,
   ITaskFormInput,
+  IUpdateSubTaskResponse,
   IUpdateTaskData,
   IUpdateTaskResponse,
+  IUpdateTaskStatusResponse,
 } from "../interfaces/task";
 import { adminApi, userApi } from "../api";
 
@@ -46,6 +48,27 @@ export const taskService = {
 
   fetchUserTasks: async (userId: string): Promise<AxiosResponse<ITask[]>> => {
     const response = await userApi.get(`/${userId}/tasks`);
+    return response;
+  },
+
+  updateSubtaskStatus: async (
+    taskId: string,
+    subtaskId: string,
+    isCompleted: boolean
+  ): Promise<AxiosResponse<IUpdateSubTaskResponse>> => {
+    const response = await userApi.patch(`/subtasks/${taskId}/${subtaskId}`, {
+      isCompleted,
+    });
+    return response;
+  },
+
+  updateTaskStatus: async (
+    taskId: string,
+    status: "pending" | "in-progress" | "completed"
+  ): Promise<AxiosResponse<IUpdateTaskStatusResponse>> => {
+    const response = await userApi.patch(`/${taskId}/status`, {
+      status,
+    });
     return response;
   },
 };
