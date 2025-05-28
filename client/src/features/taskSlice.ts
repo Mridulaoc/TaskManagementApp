@@ -3,6 +3,7 @@ import { taskService } from "../services/taskService";
 import { handleAsyncThunkError } from "../utils/errorHandling";
 import {
   IAddTaskResponse,
+  IChartData,
   IDeleteTaskResponse,
   IFetchTasksInput,
   IFetchTasksResponse,
@@ -40,6 +41,8 @@ const initialState: ITaskInitialState = {
   total: 0,
   page: 0,
   limit: 0,
+  statusChart: { labels: [], data: [] },
+  priorityChart: { labels: [], data: [] },
 };
 
 export const fetchAllTasks = createAsyncThunk<
@@ -162,6 +165,33 @@ export const updateTaskStatus = createAsyncThunk<
     return rejectWithValue(handleAsyncThunkError(error));
   }
 });
+
+export const getStatusChart = createAsyncThunk<
+  IChartData,
+  void,
+  { rejectValue: { message: string } }
+>("chart/statusChart", async (_, { rejectWithValue }) => {
+  try {
+    const response = await taskService.fetchStatusChartData();
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(handleAsyncThunkError(error));
+  }
+});
+
+export const getPriorityChart = createAsyncThunk<
+  IChartData,
+  void,
+  { rejectValue: { message: string } }
+>("chart/priorityChart", async (_, { rejectWithValue }) => {
+  try {
+    const response = await taskService.fetchPriorityChartData();
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(handleAsyncThunkError(error));
+  }
+});
+
 const taskSlice = createSlice({
   name: "task",
   initialState,
@@ -424,6 +454,35 @@ const taskSlice = createSlice({
       .addCase(updateTaskStatus.rejected, (state, action) => {
         state.updatingTaskStatus = false;
         state.error = action.payload?.message || "Failed to update task status";
+      })
+
+      // get status chart
+      .addCase(getStatusChart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getStatusChart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.statusChart = action.payload;
+      })
+      .addCase(getStatusChart.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload?.message || "Could not get status chart data";
+      })
+      // get priority chart
+      .addCase(getPriorityChart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getPriorityChart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.priorityChart = action.payload;
+      })
+      .addCase(getPriorityChart.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload?.message || "Could not get priority chart data";
       });
   },
 });

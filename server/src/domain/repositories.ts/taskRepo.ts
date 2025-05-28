@@ -123,4 +123,26 @@ export class TaskRepository {
       throw new Error(`Failed to update task status: ${error}`);
     }
   }
+
+  async getStatusCounts() {
+    return Task.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+  }
+
+  async getPriorityCounts() {
+    return Task.aggregate([
+      {
+        $group: {
+          _id: "$priority",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+  }
 }

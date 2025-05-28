@@ -7,7 +7,10 @@ import { TaskManagement } from "./pages/TaskManagement";
 import AddTaskForm from "./pages/AddTaskForm";
 import EditTaskForm from "./pages/EditTaskForm";
 import MainLayout from "./components/MainLayout";
-import { UserProtectedRoute } from "./components/ProtectedRoutes";
+import {
+  AdminProtectedRoute,
+  UserProtectedRoute,
+} from "./components/ProtectedRoutes";
 import { restoreUserAuth } from "./features/userSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
@@ -48,12 +51,30 @@ function App() {
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminHome />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="dashboard/tasks" element={<TaskManagement />} />
-          <Route path="dashboard/tasks/add" element={<AddTaskForm />} />
+
+          <Route
+            path="dashboard"
+            element={
+              <AdminProtectedRoute>
+                <TaskManagement />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/tasks/add"
+            element={
+              <AdminProtectedRoute>
+                <AddTaskForm />
+              </AdminProtectedRoute>
+            }
+          />
           <Route
             path="dashboard/tasks/edit/:taskId"
-            element={<EditTaskForm />}
+            element={
+              <AdminProtectedRoute>
+                <EditTaskForm />
+              </AdminProtectedRoute>
+            }
           />
         </Route>
       </Routes>

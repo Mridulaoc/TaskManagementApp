@@ -9,6 +9,8 @@ import {
   createTask,
   deleteTask,
   getAllTasks,
+  getPriorityChartData,
+  getStatusChartData,
   getTask,
   updateTask,
 } from "../app/controller/taskController";
@@ -27,5 +29,8 @@ adminRouter
   .put(adminMiddleware, updateTask)
   .delete(adminMiddleware, deleteTask);
 adminRouter.post("/task", adminMiddleware, createTask);
+
+adminRouter.get("/chart-data/status", adminMiddleware, getStatusChartData);
+adminRouter.get("/chart-data/priority", adminMiddleware, getPriorityChartData);
 
 export default adminRouter;

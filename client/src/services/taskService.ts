@@ -1,6 +1,7 @@
 import type { AxiosResponse } from "axios";
 import type {
   IAddTaskResponse,
+  IChartData,
   IDeleteTaskResponse,
   IFetchTasksInput,
   IFetchTasksResponse,
@@ -69,6 +70,14 @@ export const taskService = {
     const response = await userApi.patch(`/${taskId}/status`, {
       status,
     });
+    return response;
+  },
+  fetchStatusChartData: async (): Promise<AxiosResponse<IChartData>> => {
+    const response = await adminApi.get("/chart-data/status");
+    return response;
+  },
+  fetchPriorityChartData: async (): Promise<AxiosResponse<IChartData>> => {
+    const response = await adminApi.get("/chart-data/priority");
     return response;
   },
 };

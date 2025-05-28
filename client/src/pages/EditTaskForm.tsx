@@ -94,7 +94,11 @@ export default function EditTaskForm() {
         title: task.title || "",
         description: task.description || "",
         status: task.status || "pending",
-        assignedTo: task.assignedTo || [],
+        assignedTo: Array.isArray(task.assignedTo)
+          ? task.assignedTo.map((user) =>
+              typeof user === "string" ? user : user._id
+            )
+          : [],
         dueDate: formattedDate,
         priority: task.priority || "medium",
         subtasks: task.subtasks?.length
@@ -123,7 +127,7 @@ export default function EditTaskForm() {
           const successMessage =
             result.payload?.message || "Task updated successfully";
           toast.success(successMessage);
-          navigate("/admin/dashboard/tasks");
+          navigate("/admin/dashboard");
         } else if (updateTask.rejected.match(result)) {
           const errorMessage =
             result.payload?.message || "Updating task failed";
@@ -165,7 +169,7 @@ export default function EditTaskForm() {
         <div className="text-center">
           <p className="text-red-600 text-lg">Task not found</p>
           <button
-            onClick={() => navigate("/admin/dashboard/tasks")}
+            onClick={() => navigate("/admin/dashboard")}
             className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
             Back to Tasks
@@ -328,7 +332,7 @@ export default function EditTaskForm() {
         <div className="flex gap-4 justify-center">
           <button
             type="button"
-            onClick={() => navigate("/admin/dashboard/tasks")}
+            onClick={() => navigate("/admin/dashboard")}
             className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition"
           >
             Cancel

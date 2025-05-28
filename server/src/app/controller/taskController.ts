@@ -9,6 +9,8 @@ import { SocketNotificationService } from "../../infrastructure/services/SocketN
 import { GetUserTasksUseCase } from "../../domain/useCases/task/getUserTasksUseCase";
 import { UpdateSubtaskStatusUseCase } from "../../domain/useCases/task/updateSubTaskStatusUseCase";
 import { UpdateTaskStatusUseCase } from "../../domain/useCases/task/updateTaskStatusUseCase";
+import { GetStatusDataUseCase } from "../../domain/useCases/task/getStatusDataUseCase";
+import { GetPriorityDataUseCase } from "../../domain/useCases/task/getPriorityDataUseCase";
 
 const taskRepository = new TaskRepository();
 const notificationService = new SocketNotificationService();
@@ -35,6 +37,8 @@ const updateTaskStatusUseCase = new UpdateTaskStatusUseCase(
   taskRepository,
   notificationService
 );
+const getStatusDataUseCase = new GetStatusDataUseCase(taskRepository);
+const getPriorityDataUseCase = new GetPriorityDataUseCase(taskRepository);
 
 export const createTask = async (
   req: Request,
@@ -221,5 +225,23 @@ export const updateTaskStatus = async (
       success: false,
       message: "Internal server error",
     });
+  }
+};
+
+export const getStatusChartData = async (req: Request, res: Response) => {
+  try {
+    const chartData = await getStatusDataUseCase.execute();
+    res.json(chartData);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching status chart data" });
+  }
+};
+
+export const getPriorityChartData = async (req: Request, res: Response) => {
+  try {
+    const chartData = await getPriorityDataUseCase.execute();
+    res.json(chartData);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching priority chart data" });
   }
 };

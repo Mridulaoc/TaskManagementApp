@@ -21,6 +21,8 @@ export const initializeSocket = (server: Server): void => {
       }
       const decoded = verifyToken(token);
       socket.data.userId = decoded.userId;
+      const isAdmin = socket.handshake.query.isAdmin === "true";
+      socket.data.isAdmin = isAdmin;
       next();
     } catch (err) {
       next(new Error("Authentication error"));
@@ -29,8 +31,15 @@ export const initializeSocket = (server: Server): void => {
 
   io.on("connection", (socket: Socket) => {
     const userId = socket.data.userId;
-    socket.join(`user:${userId}`);
-    console.log(`User ${userId} connected`);
+    const isAdmin = socket.data.isAdmin;
+    if (isAdmin) {
+      socket.join("admin-room");
+      console.log(`Admin ${userId} connected`);
+    } else {
+      socket.join(`user:${userId}`);
+      console.log(`User ${userId} connected`);
+    }
+
     socket.on("disconnect", () => {
       console.log("Client disconnected:", socket.id);
     });

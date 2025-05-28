@@ -40,6 +40,8 @@ export interface ITaskInitialState {
   limit: number;
   updatingTaskStatus: boolean;
   updatingSubtask: boolean;
+  statusChart: IChartData;
+  priorityChart: IChartData;
 }
 
 export interface ITaskFormInput {
@@ -93,4 +95,8 @@ export interface IUpdateTaskStatusResponse {
   taskId: string;
   status: "pending" | "in-progress" | "completed";
   updatedTask: ITask;
+}
+export interface IChartData {
+  labels: string[];
+  data: number[];
 }

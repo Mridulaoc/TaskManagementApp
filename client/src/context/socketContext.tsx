@@ -6,11 +6,13 @@ import { RootState } from "../store/store";
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
+  isAdminSocket: boolean;
 }
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
   isConnected: false,
+  isAdminSocket: false,
 });
 
 export const useSocket = () => {
@@ -26,18 +28,23 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isAdminSocket, setIsAdminSocket] = useState(false);
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    console.log("IsAutenticated", isAuthenticated);
     if (isAuthenticated) {
       const token = localStorage.getItem("userToken");
-
-      if (token) {
+      const adminToken = localStorage.getItem("adminToken");
+      const currentToken = window.location.pathname.startsWith("/admin")
+        ? adminToken
+        : token;
+      if (currentToken) {
+        const isAdminConnection = window.location.pathname.startsWith("/admin");
         const newSocket = io(import.meta.env.VITE_API_BASE_URL, {
-          auth: { token },
+          auth: { token: currentToken },
+          query: { isAdmin: isAdminConnection ? "true" : "false" },
         });
-
+        setIsAdminSocket(isAdminConnection);
         newSocket.on("connect", () => {
           console.log("Connected to server");
           setIsConnected(true);
@@ -59,12 +66,13 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
         socket.close();
         setSocket(null);
         setIsConnected(false);
+        setIsAdminSocket(false);
       }
     }
   }, [isAuthenticated]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
+    <SocketContext.Provider value={{ socket, isConnected, isAdminSocket }}>
       {children}
     </SocketContext.Provider>
   );
