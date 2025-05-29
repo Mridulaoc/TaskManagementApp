@@ -72,7 +72,7 @@ export class TaskRepository {
         assignedTo: new mongoose.Types.ObjectId(userId),
       }).sort({ createdAt: -1 });
       if (!userTasks) return [];
-      console.log("Tasks from repo:", userTasks);
+
       return userTasks;
     } catch (error) {
       throw new Error("Could not fetch tasks for the user");

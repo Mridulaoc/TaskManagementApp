@@ -34,10 +34,8 @@ export const initializeSocket = (server: Server): void => {
     const isAdmin = socket.data.isAdmin;
     if (isAdmin) {
       socket.join("admin-room");
-      console.log(`Admin ${userId} connected`);
     } else {
       socket.join(`user:${userId}`);
-      console.log(`User ${userId} connected`);
     }
 
     socket.on("disconnect", () => {

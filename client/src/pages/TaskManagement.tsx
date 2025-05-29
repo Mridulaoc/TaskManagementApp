@@ -56,7 +56,6 @@ export function TaskManagement() {
   };
 
   const handleViewTask = (task: ITask) => {
-    console.log(task);
     setTaskToView(task);
     setShowViewModal(true);
   };

@@ -5,7 +5,6 @@ export class AdminRepository {
   async findAdminByEmail(email: string): Promise<IAdmin | null> {
     try {
       const admin = await Admin.findOne({ email });
-      console.log("admin", admin);
       return admin;
     } catch (error) {
       return null;

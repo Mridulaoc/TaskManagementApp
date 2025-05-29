@@ -12,8 +12,6 @@ export const adminService = {
   signUp: async (
     submissionData: ISignUpData
   ): Promise<AxiosResponse<ISignUpResponse>> => {
-    console.log(adminApi.defaults.baseURL); // Debug log
-
     const response = await adminApi.post("/signup", submissionData);
     return response;
   },

@@ -22,7 +22,7 @@ export const adminSignUp = async (
 ): Promise<void> => {
   try {
     const submissionData = req.body;
-    console.log(submissionData);
+
     const admin = await adminSignupUsecase.execute(submissionData);
     if (!admin) throw new Error("Could not create admin");
     res.status(200).json({ message: "Admin signed up successfully" });
