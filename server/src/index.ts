@@ -26,7 +26,7 @@ app.use(express.json());
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const server = createServer(app);
 initializeSocket(server);
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

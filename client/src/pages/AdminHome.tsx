@@ -12,14 +12,11 @@ export default function AdminHome() {
   return (
     <div className="  from-[#11154F]/5 to-[#3BB7F4]/5 font-['Poppins'] flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
-          <p className="text-gray-600">Admin Dashboard</p>
+          <p className="text-gray-600">Admin Login</p>
         </div>
 
-        {/* Auth Card */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          {/* Tabs */}
           <div className="flex">
             <button
               className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${

@@ -33,7 +33,6 @@ export function TaskManagement() {
       title: string;
       completedBy: string[];
     }) => {
-      // Handle admin notification
       console.log("Task completed:", data);
     };
 

@@ -12,19 +12,17 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
+  description: z.string(),
   status: z.enum(["pending", "in-progress", "completed"]),
   assignedTo: z.array(z.string()).min(1, "Assign at least one user"),
   dueDate: z.string().transform((val) => (val ? new Date(val) : undefined)),
   priority: z.enum(["low", "medium", "high"]),
-  subtasks: z
-    .array(
-      z.object({
-        title: z.string().min(1, "Subtask title is required"),
-        isCompleted: z.boolean(),
-      })
-    )
-    .optional(),
+  subtasks: z.array(
+    z.object({
+      title: z.string().min(1, "Subtask title is required"),
+      isCompleted: z.boolean(),
+    })
+  ),
 });
 
 type taskFormData = z.infer<typeof taskSchema>;
@@ -224,7 +222,7 @@ export default function EditTaskForm() {
         {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Description
+            Description<span className="text-red-500">*</span>
           </label>
           <textarea
             {...register("description")}
@@ -237,7 +235,7 @@ export default function EditTaskForm() {
           {/* Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
+              Status<span className="text-red-500">*</span>
             </label>
             <select
               {...register("status")}
@@ -252,7 +250,7 @@ export default function EditTaskForm() {
           {/* Priority */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Priority
+              Priority<span className="text-red-500">*</span>
             </label>
             <select
               {...register("priority")}
@@ -268,7 +266,7 @@ export default function EditTaskForm() {
         {/* Due Date */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Due Date
+            Due Date<span className="text-red-500">*</span>
           </label>
           <input
             type="date"
@@ -349,7 +347,7 @@ export default function EditTaskForm() {
         {/* Subtasks */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Subtasks
+            Subtasks<span className="text-red-500">*</span>
           </label>
           <div className="space-y-3">
             {fields.map((field, index) => (

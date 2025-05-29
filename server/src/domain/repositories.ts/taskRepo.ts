@@ -26,6 +26,7 @@ export class TaskRepository {
 
       const tasks = await Task.find()
         .populate("assignedTo", "name email")
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit);
       const total = await Task.countDocuments();

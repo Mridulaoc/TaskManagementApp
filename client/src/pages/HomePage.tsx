@@ -12,7 +12,10 @@ export default function HomePage() {
   return (
     <div className=" from-[#11154F]/5 to-[#3BB7F4]/5 font-['Poppins'] flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-md">
-        {/* Auth Card */}
+        <div className="text-center mb-8">
+          <p className="text-gray-600">User Login</p>
+        </div>
+
         <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300">
           {/* Tabs */}
           <div className="flex bg-gray-50">
