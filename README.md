@@ -128,12 +128,15 @@ The Task Management Application is a full-stack web app built using clean archit
 - **PATCH /subtasks/:taskId/:subtaskId**: Updating subtask (requires token)
 - **PATCH /:taskId/task**: Update task status (requires token).
 
-### Lead Routes
-- **GET /lead/api/users**: Fetch all users (requires token).
-- **GET /lead/api/tasks**: Fetch all users (requires token).
-- **POST /lead/api/task**: Create a new task (requires token).
-- **PUT /lead/api/task/:taskId**: Update an existing task (requires token).
-- **DELETE /lead/api/task/:taskId**: Delete a task (requires token).
+### Admin Routes
+- **GET /admin/users**: Fetch all users (requires token).
+- **GET /admin/get-tasks**: Fetch all tasks (requires token).
+- **POST /admin/task**: Create a new task (requires token).
+- **GET /admin/task/:taskId**: Getting a specific task (requires token)
+- **PUT /admin/task/:taskId**: Update an existing task (requires token).
+- **DELETE /admin/task/:taskId**: Delete a task (requires token).
+- **GET /admin/chart-data/status** : Getting data of task status (requires token).
+- **GET /admin/chart-data/priority** : Getting data of priority of tasks(requires token).
 
 ## Deployment
 The application is hosted live at: https://tasked-rho.vercel.app
