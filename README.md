@@ -44,10 +44,11 @@ The Task Management Application is a full-stack web app built using clean archit
 ### **Frontend**
 - React.js
 - Redux ToolKit(for state management)
-- useForm(for 
+- useForm(custom hook for managing forms)
+- zod(for validation) 
 - TypeScript (for type safety)
 - Axios (for API communication)
-- Recharts (for data visualization)
+- Chart.js (for data visualization)
 - Tailwind css (for responsive design)
 - Toastify (for user friendly toasts)
 
@@ -63,8 +64,8 @@ The Task Management Application is a full-stack web app built using clean archit
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/adarshstillalive/Tasked.git
-   cd Tasked.
+   git clone https://github.com/Mridulaoc/TaskManagementApp.git
+   cd TaskManagementApp
 
 
 2.  **Install Dependencies:**
@@ -84,17 +85,16 @@ The Task Management Application is a full-stack web app built using clean archit
   - Create a .env file in the server directory with the following variables:
     
     ```bash
-    PORT = 8080
+    PORT = 3001
     CLIENT_URL = <client_url>
-    MONGO_USERNAME = <mongo_username>
-    MONGO_PASSWORD = <mongo_password>
+    MONGO_URI=<mongo_uri>
     JWT_SECRET_KEY = <jwt_secretkey>
     
 4. **Set up Environment Variables: Client**
   - Create a .env file in the client directory with the following variables:
     
     ```bash
-    VITE_SERVER_URL = <server_url>
+    VITE_API_BASE_URL = <server_url>
 
 5. **Run the application:**
    - **Start the backend server**
@@ -117,14 +117,16 @@ The Task Management Application is a full-stack web app built using clean archit
 **Endpoints**
 
 ### Authentication
-- **POST /api/signup**: Register a new user.
-- **POST /api/login**: Login and receive a JWT token.
-- **POST /lead/api/signup**: Register a new lead.
-- **POST /lead/api/login**: Login and receive a JWT token.
+- **POST /**: Register a new user.
+- **POST /login**: Login and receive a JWT token.
+- **POST /admin/signup**: Register admin.
+- **POST /admin/login**: Login and receive a JWT token.
 
 ### User Routes
-- **GET /api/tasks**: Fetch tasks (requires token).
-- **PATCH /api/task/:taskId**: Update task status (requires token).
+- **GET /verify-token**: Verifying jwt token (requires token).
+- **GET /:userId/tasks**: Getting tasks assignedto a specific user (requires token).
+- **PATCH /subtasks/:taskId/:subtaskId**: Updating subtask (requires token)
+- **PATCH /:taskId/task**: Update task status (requires token).
 
 ### Lead Routes
 - **GET /lead/api/users**: Fetch all users (requires token).
