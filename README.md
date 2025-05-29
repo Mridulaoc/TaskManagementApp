@@ -139,11 +139,11 @@ The Task Management Application is a full-stack web app built using clean archit
 - **GET /admin/chart-data/priority** : Getting data of priority of tasks(requires token).
 
 ## Deployment
-The application is hosted live at: https://tasked-rho.vercel.app
+The application is hosted live at: https://task-management-app-snowy-sigma.vercel.app
 
 ## Contact
 
 For any queries or suggestions, feel free to reach out:
-- Author: Adarsh K S
-- Email: adarshstillalive@gmail.com
-- LinkedIn: www.linkedin.com/in/adarshks17
+- Author: Mridula O C
+- Email: mridulaOC@gmail.com
+- LinkedIn: www.linkedin.com/in/mridulaoc
