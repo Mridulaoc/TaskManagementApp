@@ -126,7 +126,7 @@ const TaskCard = ({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-[#3BB7F4] h-2 rounded-full transition-all duration-300"
+                  className="bg-secondary h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${
                       totalSubtasks > 0
@@ -149,7 +149,7 @@ const TaskCard = ({
             </span>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="text-sm font-medium text-[#11154F] hover:text-[#3BB7F4] transition-colors"
+              className="text-sm font-medium text-primary hover:text-secondary transition-colors"
             >
               View details →
             </button>
@@ -175,7 +175,7 @@ const TaskCard = ({
                 {/* Modal header */}
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#11154F]">
+                    <h3 className="text-2xl font-bold text-primary">
                       {task.title}
                     </h3>
                     <div className="flex items-center space-x-3 mt-2">
@@ -263,7 +263,7 @@ const TaskCard = ({
                                 e.target.checked
                               )
                             }
-                            className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
+                            className="h-4 w-4 text-secondary rounded border-gray-300 focus:ring-secondary cursor-pointer"
                           />
                           <div className="ml-3 flex-1">
                             <p
@@ -290,7 +290,7 @@ const TaskCard = ({
               <div className="bg-gray-50 px-6 py-4 flex justify-end">
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-[#11154F] text-white rounded-md hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors"
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-colors"
                 >
                   Close
                 </button>

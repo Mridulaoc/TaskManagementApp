@@ -118,12 +118,12 @@ export function TaskManagement() {
   return (
     <div className="p-4 md:p-8 font-['Poppins']">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-[#11154F] mb-4 md:mb-0">
+        <h1 className="text-2xl md:text-3xl font-semibold text-primary mb-4 md:mb-0">
           Task Management
         </h1>
         <button
           onClick={handleAddTask}
-          className="bg-[#11154F] hover:bg-[#0a0d3a] text-white px-6 py-2 rounded-lg transition-colors duration-200 shadow-md"
+          className="bg-primary hover:bg-[#0a0d3a] text-white px-6 py-2 rounded-lg transition-colors duration-200 shadow-md"
         >
           Add Task
         </button>
@@ -134,7 +134,7 @@ export function TaskManagement() {
       </div>
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3BB7F4]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
         </div>
       ) : error ? (
         <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
@@ -145,7 +145,7 @@ export function TaskManagement() {
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-[#11154F]">
+                <thead className="bg-primary">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Title
@@ -208,7 +208,7 @@ export function TaskManagement() {
                           <div className="flex justify-center space-x-3">
                             <button
                               onClick={() => handleViewTask(task)}
-                              className="text-[#3BB7F4] hover:text-[#2a9bd8] transition-colors"
+                              className="text-secondary hover:text-[#2a9bd8] transition-colors"
                               title="View"
                             >
                               <svg
@@ -234,7 +234,7 @@ export function TaskManagement() {
                             </button>
                             <button
                               onClick={() => handleEditTask(task._id!)}
-                              className="text-[#11154F] hover:text-[#0a0d3a] transition-colors"
+                              className="text-primary hover:text-[#0a0d3a] transition-colors"
                               title="Edit"
                             >
                               <svg
@@ -330,7 +330,7 @@ export function TaskManagement() {
                   className={`px-4 py-2 border rounded-md text-sm font-medium ${
                     page === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-[#11154F] hover:bg-gray-50"
+                      : "bg-white text-primary hover:bg-gray-50"
                   }`}
                 >
                   Previous
@@ -350,8 +350,8 @@ export function TaskManagement() {
                         onClick={() => setPage(pageNum)}
                         className={`px-4 py-2 border rounded-md text-sm font-medium ${
                           page === pageNum
-                            ? "bg-[#11154F] text-white"
-                            : "bg-white text-[#11154F] hover:bg-gray-50"
+                            ? "bg-primary text-white"
+                            : "bg-white text-primary hover:bg-gray-50"
                         }`}
                       >
                         {pageNum}
@@ -368,7 +368,7 @@ export function TaskManagement() {
                   className={`px-4 py-2 border rounded-md text-sm font-medium ${
                     page === Math.ceil(total / limit)
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-[#11154F] hover:bg-gray-50"
+                      : "bg-white text-primary hover:bg-gray-50"
                   }`}
                 >
                   Next
@@ -399,7 +399,7 @@ export function TaskManagement() {
               <div className="bg-white px-6 py-4">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#11154F]">
+                    <h3 className="text-2xl font-bold text-primary">
                       {taskToView.title}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
@@ -537,7 +537,7 @@ export function TaskManagement() {
                             type="checkbox"
                             checked={subtask.isCompleted}
                             readOnly
-                            className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4]"
+                            className="h-4 w-4 text-secondary rounded border-gray-300 focus:ring-secondary"
                           />
                           <span
                             className={`ml-3 text-sm ${
@@ -566,7 +566,7 @@ export function TaskManagement() {
                     setShowViewModal(false);
                     handleEditTask(taskToView._id!);
                   }}
-                  className="px-4 py-2 bg-[#11154F] text-white rounded-md text-sm font-medium hover:bg-[#0a0d3a]"
+                  className="px-4 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-[#0a0d3a]"
                 >
                   Edit Task
                 </button>
@@ -632,7 +632,7 @@ export function TaskManagement() {
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(false)}
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 >
                   Cancel
                 </button>

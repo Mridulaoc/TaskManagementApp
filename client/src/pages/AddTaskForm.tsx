@@ -85,7 +85,7 @@ export default function AddTaskForm() {
   };
   return (
     <div className="max-w-3xl mx-auto mt-6 md:mt-10 p-4 md:p-8 border rounded-lg shadow-sm bg-white font-['Poppins']">
-      <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-[#11154F]">
+      <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-primary">
         Add New Task
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -98,7 +98,7 @@ export default function AddTaskForm() {
             {...register("title")}
             className={`w-full px-4 py-2 border ${
               errors.title ? "border-red-300" : "border-gray-300"
-            } rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4]`}
+            } rounded-md focus:ring-secondary focus:border-secondary`}
             placeholder="Enter task title"
           />
           {errors.title && (
@@ -113,7 +113,7 @@ export default function AddTaskForm() {
           </label>
           <textarea
             {...register("description")}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4]"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-secondary focus:border-secondary"
             rows={4}
             placeholder="Enter task description"
           ></textarea>
@@ -127,7 +127,7 @@ export default function AddTaskForm() {
             </label>
             <select
               {...register("status")}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-secondary focus:border-secondary"
             >
               <option value="pending">Pending</option>
               <option value="in-progress">In Progress</option>
@@ -142,7 +142,7 @@ export default function AddTaskForm() {
             </label>
             <select
               {...register("priority")}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-secondary focus:border-secondary"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -159,7 +159,7 @@ export default function AddTaskForm() {
           <input
             type="date"
             {...register("dueDate")}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4]"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-secondary focus:border-secondary"
           />
         </div>
 
@@ -172,7 +172,7 @@ export default function AddTaskForm() {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className={`w-full px-4 py-2 border ${
               errors.assignedTo ? "border-red-300" : "border-gray-300"
-            } rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4] cursor-pointer flex justify-between items-center`}
+            } rounded-md focus:ring-secondary focus:border-secondary cursor-pointer flex justify-between items-center`}
           >
             <span className="text-gray-700">
               {assignedTo.length > 0
@@ -216,7 +216,7 @@ export default function AddTaskForm() {
                       type="checkbox"
                       checked={assignedTo.includes(user._id!)}
                       onChange={() => handleUserToggle(user._id!)}
-                      className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
+                      className="h-4 w-4 text-secondary rounded border-gray-300 focus:ring-secondary cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     />
                     <span className="ml-3 text-gray-700">{user.name}</span>
@@ -248,7 +248,7 @@ export default function AddTaskForm() {
                       errors.subtasks?.[index]?.title
                         ? "border-red-300"
                         : "border-gray-300"
-                    } rounded-md focus:ring-[#3BB7F4] focus:border-[#3BB7F4]`}
+                    } rounded-md focus:ring-secondary focus:border-secondary`}
                   />
                   {errors.subtasks?.[index]?.title && (
                     <p className="mt-1 text-sm text-red-600">
@@ -283,7 +283,7 @@ export default function AddTaskForm() {
           <button
             type="button"
             onClick={() => append({ title: "", isCompleted: false })}
-            className="mt-3 flex items-center text-[#3BB7F4] hover:text-[#2a9bd8] transition-colors"
+            className="mt-3 flex items-center text-secondary hover:text-[#2a9bd8] transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -307,7 +307,7 @@ export default function AddTaskForm() {
         <div className="pt-4 flex justify-end">
           <button
             type="submit"
-            className="px-6 py-2 bg-[#11154F] text-white font-medium rounded-md hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors"
+            className="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-colors"
           >
             Create Task
           </button>

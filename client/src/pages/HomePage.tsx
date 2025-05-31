@@ -10,7 +10,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className=" from-[#11154F]/5 to-[#3BB7F4]/5 font-['Poppins'] flex items-center justify-center p-4 md:p-8">
+    <div className=" from-primary/5 to-secondary/5 font-['Poppins'] flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <p className="text-gray-600">User Login</p>
@@ -22,7 +22,7 @@ export default function HomePage() {
             <button
               className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${
                 activeTab === "login"
-                  ? "text-[#11154F] border-b-2 border-[#11154F] bg-white"
+                  ? "text-primary border-b-2 border-primary bg-white"
                   : "text-gray-500 hover:text-gray-700"
               }`}
               onClick={() => setActiveTab("login")}
@@ -32,7 +32,7 @@ export default function HomePage() {
             <button
               className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${
                 activeTab === "signup"
-                  ? "text-[#11154F] border-b-2 border-[#11154F] bg-white"
+                  ? "text-primary border-b-2 border-primary bg-white"
                   : "text-gray-500 hover:text-gray-700"
               }`}
               onClick={() => setActiveTab("signup")}

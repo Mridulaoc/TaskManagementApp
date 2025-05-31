@@ -58,7 +58,7 @@ export default function Login() {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-md p-6 md:p-8 bg-white rounded-xl shadow-md font-['Poppins']"
     >
-      <h2 className="text-xl font-semibold text-[#11154F] mb-1 text-center p-2">
+      <h2 className="text-xl font-semibold text-primary mb-1 text-center p-2">
         Welcome Back
       </h2>
 
@@ -73,7 +73,7 @@ export default function Login() {
           placeholder="Enter your email"
           className={`w-full px-4 py-3 rounded-lg border ${
             errors.email ? "border-red-500" : "border-gray-300"
-          } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition text-sm`}
+          } focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition text-sm`}
         />
         {errors.email && (
           <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -91,7 +91,7 @@ export default function Login() {
           placeholder="Enter your password"
           className={`w-full px-4 py-3 rounded-lg border ${
             errors.password ? "border-red-500" : "border-gray-300"
-          } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition text-sm`}
+          } focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition text-sm`}
         />
         {errors.password && (
           <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
@@ -102,7 +102,7 @@ export default function Login() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-3 px-4 bg-[#11154F] hover:bg-[#0a0d3a] text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] disabled:opacity-70 disabled:cursor-not-allowed"
+        className="w-full py-3 px-4 bg-primary hover:bg-[#0a0d3a] text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary disabled:opacity-70 disabled:cursor-not-allowed"
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center">

@@ -20,19 +20,15 @@ const AdminNavbar = () => {
           className="text-2xl md:text-3xl font-bold cursor-pointer"
           onClick={() => isAuthenticated && navigate("/admin/dashboard")}
         >
-          <span className="text-[#11154F]">Task</span>
-          <span className="text-[#3BB7F4]">Tribe</span>
+          <span className="text-primary">Task</span>
+          <span className="text-secondary">Tribe</span>
         </div>
 
-        {/* Navigation Items */}
         {isAuthenticated && (
           <div className="flex items-center space-x-4 md:space-x-6">
-            {/* You can add more nav items here */}
-
-            {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-1 text-[#11154F] hover:text-[#0a0d3a] transition-colors"
+              className="flex items-center space-x-1 text-primary hover:text-[#0a0d3a] transition-colors"
             >
               <span className="hidden sm:inline-block">Logout</span>
               <svg

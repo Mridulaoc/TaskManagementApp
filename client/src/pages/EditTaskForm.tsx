@@ -153,7 +153,7 @@ export default function EditTaskForm() {
     return (
       <div className="max-w-3xl mx-auto mt-10 p-8 bg-white rounded-xl shadow-md font-['Poppins']">
         <div className="flex flex-col items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3BB7F4]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
           <p className="mt-4 text-gray-600">Loading task data...</p>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function EditTaskForm() {
           </p>
           <button
             onClick={() => navigate("/admin/dashboard")}
-            className="mt-6 px-6 py-2 bg-[#11154F] text-white rounded-lg hover:bg-[#0a0d3a] transition-colors"
+            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg hover:bg-[#0a0d3a] transition-colors"
           >
             Back to Dashboard
           </button>
@@ -198,7 +198,7 @@ export default function EditTaskForm() {
 
   return (
     <div className="max-w-3xl mx-auto my-6 md:my-10 p-6 md:p-8 bg-white rounded-xl shadow-md font-['Poppins']">
-      <h2 className="text-xl md:text-2xl font-semibold text-[#11154F] mb-2 text-center">
+      <h2 className="text-xl md:text-2xl font-semibold text-primary mb-2 text-center">
         Edit Task
       </h2>
 
@@ -212,7 +212,7 @@ export default function EditTaskForm() {
             {...register("title")}
             className={`w-full px-4 py-3 rounded-lg border ${
               errors.title ? "border-red-500" : "border-gray-300"
-            } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition`}
+            } focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition`}
           />
           {errors.title && (
             <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
@@ -226,7 +226,7 @@ export default function EditTaskForm() {
           </label>
           <textarea
             {...register("description")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none transition"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition"
             rows={4}
           />
         </div>
@@ -239,7 +239,7 @@ export default function EditTaskForm() {
             </label>
             <select
               {...register("status")}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
             >
               <option value="pending">Pending</option>
               <option value="in-progress">In Progress</option>
@@ -254,7 +254,7 @@ export default function EditTaskForm() {
             </label>
             <select
               {...register("priority")}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -271,7 +271,7 @@ export default function EditTaskForm() {
           <input
             type="date"
             {...register("dueDate")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
           />
         </div>
 
@@ -284,7 +284,7 @@ export default function EditTaskForm() {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className={`w-full px-4 py-3 rounded-lg border ${
               errors.assignedTo ? "border-red-500" : "border-gray-300"
-            } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none cursor-pointer flex justify-between items-center`}
+            } focus:ring-2 focus:ring-secondary focus:border-secondary outline-none cursor-pointer flex justify-between items-center`}
           >
             <span className="text-gray-700">
               {assignedTo.length > 0
@@ -328,7 +328,7 @@ export default function EditTaskForm() {
                       type="checkbox"
                       checked={assignedTo.includes(user._id!)}
                       onChange={() => handleUserToggle(user._id!)}
-                      className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
+                      className="h-4 w-4 text-secondary rounded border-gray-300 focus:ring-secondary cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     />
                     <span className="ml-3 text-gray-700">{user.name}</span>
@@ -356,7 +356,7 @@ export default function EditTaskForm() {
                   <input
                     type="checkbox"
                     {...register(`subtasks.${index}.isCompleted`)}
-                    className="h-4 w-4 text-[#3BB7F4] rounded border-gray-300 focus:ring-[#3BB7F4] cursor-pointer"
+                    className="h-4 w-4 text-secondary rounded border-gray-300 focus:ring-secondary cursor-pointer"
                   />
                 </div>
                 <div className="flex-1">
@@ -367,7 +367,7 @@ export default function EditTaskForm() {
                       errors.subtasks?.[index]?.title
                         ? "border-red-500"
                         : "border-gray-300"
-                    } focus:ring-2 focus:ring-[#3BB7F4] focus:border-[#3BB7F4] outline-none`}
+                    } focus:ring-2 focus:ring-secondary focus:border-secondary outline-none`}
                   />
                   {errors.subtasks?.[index]?.title && (
                     <p className="mt-1 text-sm text-red-600">
@@ -403,7 +403,7 @@ export default function EditTaskForm() {
           <button
             type="button"
             onClick={() => append({ title: "", isCompleted: false })}
-            className="mt-3 flex items-center text-[#3BB7F4] hover:text-[#2a9bd8] transition-colors"
+            className="mt-3 flex items-center text-secondary hover:text-[#2a9bd8] transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -428,14 +428,14 @@ export default function EditTaskForm() {
           <button
             type="button"
             onClick={() => navigate("/admin/dashboard")}
-            className="px-6 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors"
+            className="px-6 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-6 py-2 bg-[#11154F] text-white font-medium rounded-lg hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3BB7F4] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#0a0d3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
           >
             Update Task
           </button>

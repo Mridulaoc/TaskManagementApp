@@ -84,8 +84,8 @@ const Navbar = () => {
           className="text-2xl md:text-3xl font-bold cursor-pointer flex items-center"
           onClick={() => navigate("/")}
         >
-          <span className="text-[#11154F]">Task</span>
-          <span className="text-[#3BB7F4]">Tribe</span>
+          <span className="text-primary">Task</span>
+          <span className="text-secondary">Tribe</span>
         </div>
 
         {/* Navigation Items */}
@@ -95,7 +95,7 @@ const Navbar = () => {
             <div className="relative" ref={notificationRef}>
               <button
                 onClick={toggleNotifications}
-                className="relative p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600 hover:text-[#11154F]"
+                className="relative p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600 hover:text-primary"
                 aria-label="Notifications"
               >
                 <IoNotifications size={22} />
@@ -108,13 +108,13 @@ const Navbar = () => {
 
               {showNotifications && (
                 <div className="absolute right-0 mt-2 w-80 md:w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden">
-                  <div className="p-3 border-b border-gray-200 flex justify-between items-center bg-[#11154F] text-white">
+                  <div className="p-3 border-b border-gray-200 flex justify-between items-center bg-primary text-white">
                     <h3 className="font-semibold">Notifications</h3>
                     <div className="flex gap-3">
                       {unreadCount > 0 && (
                         <button
                           onClick={handleMarkAllRead}
-                          className="text-white hover:text-[#3BB7F4] transition-colors"
+                          className="text-white hover:text-secondary transition-colors"
                           title="Mark all as read"
                         >
                           <IoCheckmarkDone size={18} />
@@ -153,7 +153,7 @@ const Navbar = () => {
                               <p
                                 className={`text-sm ${
                                   !notification.isRead
-                                    ? "font-semibold text-[#11154F]"
+                                    ? "font-semibold text-primary"
                                     : "text-gray-700"
                                 }`}
                               >
@@ -166,7 +166,7 @@ const Navbar = () => {
                               )}
                             </div>
                             {!notification.isRead && (
-                              <div className="w-2 h-2 bg-[#3BB7F4] rounded-full mt-2 flex-shrink-0"></div>
+                              <div className="w-2 h-2 bg-secondary rounded-full mt-2 flex-shrink-0"></div>
                             )}
                           </div>
                         </div>
@@ -190,7 +190,7 @@ const Navbar = () => {
                 </div>
                 <IoPersonCircle
                   size={28}
-                  className="text-[#11154F] hover:text-[#3BB7F4] transition-colors"
+                  className="text-primary hover:text-secondary transition-colors"
                 />
               </button>
 
@@ -203,7 +203,7 @@ const Navbar = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#11154F] transition-colors"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors"
                   >
                     Sign out
                   </button>

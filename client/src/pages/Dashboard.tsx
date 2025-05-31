@@ -115,7 +115,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3BB7F4]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
         <span className="mt-4 text-gray-600 font-['Poppins']">
           Loading your tasks...
         </span>
@@ -128,13 +128,13 @@ const Dashboard = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
-          <h1 className="text-xl md:text-2xl font-semibold text-[#11154F]">
+          <h1 className="text-xl md:text-2xl font-semibold text-primary">
             My Tasks
           </h1>
         </div>
 
         <div className="flex items-center space-x-4 mt-4 md:mt-0">
-          <div className="bg-[#11154F]/10 text-[#11154F] px-3 py-1 rounded-full text-sm">
+          <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
             {userTasks.length} task{userTasks.length !== 1 ? "s" : ""}
           </div>
 
