@@ -12,10 +12,15 @@ export class LoginUseCase {
   async execute(loginData: ILoginData): Promise<ILoginResponse> {
     const user = await this.userRepository.findUserByEmail(loginData.email);
     if (!user) throw new Error("Invalid email or password");
+    console.log("Passwords,", loginData.password, user.password);
     const isMatch = await this.bcryptService.comparePasswords(
       loginData.password,
       user.password
     );
+
+    if (!isMatch) {
+      throw new Error("Invalid email or password");
+    }
     const token = generateToken({
       userId: user._id.toString(),
       email: user.email,

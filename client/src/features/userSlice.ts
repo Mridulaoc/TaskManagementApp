@@ -9,6 +9,7 @@ import type {
   IUserState,
 } from "../interfaces/user";
 import { handleAsyncThunkError } from "../utils/errorHandling";
+import axios from "axios";
 
 const initialState: IUserState = {
   loading: false,
@@ -33,8 +34,16 @@ export const signupUser = createAsyncThunk<
     try {
       const response = await userService.signUp(submissionData);
       return response.data;
-    } catch (error) {
-      return rejectWithValue(handleAsyncThunkError(error));
+    } catch (error: unknown) {
+      // return rejectWithValue(handleAsyncThunkError(error));
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue({
+          message: error.response?.data?.message || "Signup failed",
+        });
+      }
+      return rejectWithValue({
+        message: error instanceof Error ? error.message : "Signup failed",
+      });
     }
   }
 );
@@ -49,7 +58,15 @@ export const loginUser = createAsyncThunk<
     localStorage.setItem("userToken", response.data.token);
     return response.data;
   } catch (error) {
-    return rejectWithValue(handleAsyncThunkError(error));
+    // return rejectWithValue(handleAsyncThunkError(error));
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue({
+        message: error.response?.data?.message || "Login failed",
+      });
+    }
+    return rejectWithValue({
+      message: error instanceof Error ? error.message : "Login failed",
+    });
   }
 });
 

@@ -11,6 +11,22 @@ const bcryptService = new BcryptService();
 const signupUsecase = new SignUpUseCase(userRepository, bcryptService);
 const loginUseCase = new LoginUseCase(userRepository, bcryptService);
 
+// export const userSignUp = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const submissionData = req.body;
+//     const user = await signupUsecase.execute(submissionData);
+//     if (!user) throw new Error("Could not create user");
+//     res.status(200).json({ message: "User signed up successfully" });
+//   } catch (error) {
+//     res.status(400).json({
+//       message: error instanceof Error ? error.message : "Signup failed",
+//     });
+//   }
+// };
+
 export const userSignUp = async (
   req: Request,
   res: Response
@@ -18,10 +34,14 @@ export const userSignUp = async (
   try {
     const submissionData = req.body;
     const user = await signupUsecase.execute(submissionData);
-    if (!user) throw new Error("Could not create user");
-    res.status(200).json({ message: "User signed up successfully" });
+    res.status(201).json({ message: "User signed up successfully" });
   } catch (error) {
-    res.status(400).json({
+    const statusCode =
+      error instanceof Error && error.message === "Email is already existing"
+        ? 409
+        : 400;
+
+    res.status(statusCode).json({
       message: error instanceof Error ? error.message : "Signup failed",
     });
   }
@@ -30,6 +50,7 @@ export const userSignUp = async (
 export const userLogin = async (req: Request, res: Response): Promise<void> => {
   try {
     const loginData = req.body;
+    console.log("Controller", loginData);
     const result = await loginUseCase.execute(loginData);
     res.status(200).json(result);
   } catch (error) {

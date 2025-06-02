@@ -3,12 +3,8 @@ import { ISignUpData, IUser } from "../entities/user";
 
 export class UserRepository {
   async findUserByEmail(email: string): Promise<IUser | null> {
-    try {
-      const user = await User.findOne({ email });
-      return user;
-    } catch (error) {
-      return null;
-    }
+    const user = await User.findOne({ email });
+    return user;
   }
 
   async createUser(data: ISignUpData) {

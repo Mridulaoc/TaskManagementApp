@@ -8,24 +8,16 @@ export class SignUpUseCase {
     private bcryptService: BcryptService
   ) {}
 
-  async execute(data: ISignUpData): Promise<IUser | null> {
-    try {
-      const existingUser = await this.userRepository.findUserByEmail(
-        data.email
-      );
-      if (existingUser) {
-        throw new Error("Email is already existing");
-      }
-      const hashedPassword = await this.bcryptService.hashPassword(
-        data.password
-      );
-      const user = await this.userRepository.createUser({
-        ...data,
-        password: hashedPassword,
-      });
-      return user;
-    } catch (error) {
-      return null;
+  async execute(data: ISignUpData): Promise<IUser> {
+    const existingUser = await this.userRepository.findUserByEmail(data.email);
+    if (existingUser) {
+      throw new Error("Email is already existing");
     }
+    const hashedPassword = await this.bcryptService.hashPassword(data.password);
+    const user = await this.userRepository.createUser({
+      ...data,
+      password: hashedPassword,
+    });
+    return user;
   }
 }

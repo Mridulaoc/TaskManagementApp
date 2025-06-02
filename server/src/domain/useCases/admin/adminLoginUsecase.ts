@@ -16,6 +16,10 @@ export class AdminLoginUseCase {
       loginData.password,
       admin.password
     );
+
+    if (!isMatch) {
+      throw new Error("Invalid email or password");
+    }
     const token = generateToken({
       adminId: admin._id.toString(),
       email: admin.email,

@@ -9,6 +9,7 @@ import type {
 import { handleAsyncThunkError } from "../utils/errorHandling";
 import type { IAdminState } from "../interfaces/admin";
 import { IUser } from "../interfaces/user";
+import axios from "axios";
 
 const initialState: IAdminState = {
   loading: false,
@@ -44,7 +45,15 @@ export const adminLogin = createAsyncThunk<
     localStorage.setItem("adminToken", response.data.token);
     return response.data;
   } catch (error) {
-    return rejectWithValue(handleAsyncThunkError(error));
+    // return rejectWithValue(handleAsyncThunkError(error));
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue({
+        message: error.response?.data?.message || "Login failed",
+      });
+    }
+    return rejectWithValue({
+      message: error instanceof Error ? error.message : "Login failed",
+    });
   }
 });
 
