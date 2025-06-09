@@ -73,7 +73,7 @@ export default function AddTaskForm() {
 
     if (addTask.fulfilled.match(result)) {
       toast.success("New Task Added Successfully");
-      navigate("/admin/dashboard/tasks");
+      navigate("/admin/dashboard");
     }
   };
   const assignedTo = watch("assignedTo") || [];

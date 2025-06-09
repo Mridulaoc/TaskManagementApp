@@ -28,7 +28,7 @@ export default function AdminHome() {
             >
               Login
             </button>
-            <button
+            {/* <button
               className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${
                 activeTab === "signup"
                   ? "text-primary border-b-2 border-primary"
@@ -37,7 +37,7 @@ export default function AdminHome() {
               onClick={() => setActiveTab("signup")}
             >
               Sign Up
-            </button>
+            </button> */}
           </div>
 
           {/* Form Content */}
