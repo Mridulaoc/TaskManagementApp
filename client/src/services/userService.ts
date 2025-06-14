@@ -7,24 +7,25 @@ import type {
   ISignUpData,
   ISignUpResponse,
 } from "../interfaces/user";
+import { USER_ENDPOINTS } from "../constants/userEndpoints";
 
 export const userService = {
   signUp: async (
     submissionData: ISignUpData
   ): Promise<AxiosResponse<ISignUpResponse>> => {
-    const response = await userApi.post("/", submissionData);
+    const response = await userApi.post(USER_ENDPOINTS.SIGNUP, submissionData);
     return response;
   },
 
   login: async (
     loginData: ILoginData
   ): Promise<AxiosResponse<ILoginResponse>> => {
-    const response = await userApi.post("/login", loginData);
+    const response = await userApi.post(USER_ENDPOINTS.LOGIN, loginData);
     return response;
   },
 
   verifyToken: async (): Promise<AxiosResponse<IAuthRestoreResponse>> => {
-    const response = await userApi.get("/verify-token");
+    const response = await userApi.get(USER_ENDPOINTS.VERIFY_TOKEN);
     return response;
   },
 };

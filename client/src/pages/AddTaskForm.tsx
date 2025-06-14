@@ -1,5 +1,5 @@
 import { useForm, useFieldArray } from "react-hook-form";
-import { z } from "zod";
+import { taskSchema, taskFormData } from "../validations.ts/taskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
@@ -10,22 +10,6 @@ import { addTask } from "../features/taskSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const taskSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string(),
-  status: z.enum(["pending", "in-progress", "completed"]),
-  assignedTo: z.array(z.string()).min(1, "Assign at least one user"),
-  dueDate: z.string().transform((val) => (val ? new Date(val) : undefined)),
-  priority: z.enum(["low", "medium", "high"]),
-  subtasks: z.array(
-    z.object({
-      title: z.string().min(1, "Subtask title is required"),
-      isCompleted: z.boolean(),
-    })
-  ),
-});
-
-type taskFormData = z.infer<typeof taskSchema>;
 export default function AddTaskForm() {
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -89,7 +73,6 @@ export default function AddTaskForm() {
         Add New Task
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Title */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Title <span className="text-red-500">*</span>
@@ -106,7 +89,6 @@ export default function AddTaskForm() {
           )}
         </div>
 
-        {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Description<span className="text-red-500">*</span>
@@ -117,10 +99,14 @@ export default function AddTaskForm() {
             rows={4}
             placeholder="Enter task description"
           ></textarea>
+          {errors.description && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.description.message}
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Status<span className="text-red-500">*</span>
@@ -135,7 +121,6 @@ export default function AddTaskForm() {
             </select>
           </div>
 
-          {/* Priority */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Priority<span className="text-red-500">*</span>
@@ -151,7 +136,6 @@ export default function AddTaskForm() {
           </div>
         </div>
 
-        {/* Due Date */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Due Date<span className="text-red-500">*</span>
@@ -163,7 +147,6 @@ export default function AddTaskForm() {
           />
         </div>
 
-        {/* Assigned Users */}
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Assigned Users <span className="text-red-500">*</span>
@@ -232,7 +215,6 @@ export default function AddTaskForm() {
           )}
         </div>
 
-        {/* Subtasks */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Subtasks<span className="text-red-500">*</span>
@@ -303,7 +285,6 @@ export default function AddTaskForm() {
           </button>
         </div>
 
-        {/* Submit Button */}
         <div className="pt-4 flex justify-end">
           <button
             type="submit"

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { signupFormData, signupSchema } from "../validations.ts/signupSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ISignUpData } from "../interfaces/user";
@@ -7,23 +7,6 @@ import type { AppDispatch } from "../store/store";
 import { signupUser } from "../features/userSlice";
 import { toast } from "react-toastify";
 import { adminSignUp } from "../features/adminSlice";
-
-const signupSchema = z.object({
-  name: z
-    .string()
-    .min(5, { message: "Name must be at least 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" }),
-  email: z.string().email("Invalid email").nonempty("Email is required"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one digit")
-    .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
-});
-
-export type signupFormData = z.infer<typeof signupSchema>;
 
 interface ISignUpProps {
   onSignupSuccess: () => void;
@@ -84,8 +67,6 @@ export default function SignUp({ onSignupSuccess }: ISignUpProps) {
       <h2 className="text-xl font-semibold text-primary mb-2 text-center">
         Create Your Account
       </h2>
-
-      {/* Name Field */}
       <div className="mb-5">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Full Name <span className="text-red-500">*</span>
@@ -103,7 +84,6 @@ export default function SignUp({ onSignupSuccess }: ISignUpProps) {
         )}
       </div>
 
-      {/* Email Field */}
       <div className="mb-5">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Email Address <span className="text-red-500">*</span>
@@ -121,7 +101,6 @@ export default function SignUp({ onSignupSuccess }: ISignUpProps) {
         )}
       </div>
 
-      {/* Password Field */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Password <span className="text-red-500">*</span>
@@ -139,7 +118,6 @@ export default function SignUp({ onSignupSuccess }: ISignUpProps) {
         )}
       </div>
 
-      {/* Submit Button */}
       <button
         type="submit"
         disabled={isSubmitting}

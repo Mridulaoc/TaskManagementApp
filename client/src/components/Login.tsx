@@ -1,25 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { z } from "zod";
+import { loginFormData, loginSchema } from "../validations.ts/loginSchema";
 import type { AppDispatch } from "../store/store";
 import { loginUser } from "../features/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { adminLogin } from "../features/adminSlice";
-
-const loginSchema = z.object({
-  email: z.string().email("Invalid email").nonempty("Email is required"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one digit")
-    .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
-});
-
-type loginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
@@ -61,8 +48,6 @@ export default function Login() {
       <h2 className="text-xl font-semibold text-primary mb-1 text-center p-2">
         Welcome Back
       </h2>
-
-      {/* Email Field */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Email Address <span className="text-red-500">*</span>
@@ -79,8 +64,6 @@ export default function Login() {
           <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
         )}
       </div>
-
-      {/* Password Field */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Password <span className="text-red-500">*</span>
@@ -97,8 +80,6 @@ export default function Login() {
           <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
         )}
       </div>
-
-      {/* Submit Button */}
       <button
         type="submit"
         disabled={isSubmitting}
