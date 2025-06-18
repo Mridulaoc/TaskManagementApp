@@ -1,9 +1,10 @@
-import { ITask } from "../../domain/entities/task";
-import { IUser } from "../../domain/entities/user";
-import { emitToUsers, getIO } from "../../services/socketService";
+import { ITask } from "../../domain/entities/Task";
+import { IUser } from "../../domain/entities/User";
+import { ISocketNotificationService } from "../../domain/interfaces/SocketNotificationService";
+import { emitToUsers, getIO } from "../services/socketService";
 
-export class SocketNotificationService {
-  private extractUserIds(task: Partial<ITask>): string[] {
+export class SocketNotificationService implements ISocketNotificationService {
+  extractUserIds(task: Partial<ITask>): string[] {
     if (!task.assignedTo || task.assignedTo.length === 0) return [];
 
     return task.assignedTo.map((user: string | IUser) =>

@@ -26,3 +26,13 @@ export interface ITaskData {
   dueDate?: Date;
   subtasks?: ISubTask[];
 }
+
+export interface IGetStatusCountResponse {
+  _id: string;
+  count: number;
+}
+
+export interface IGetPriorityCountResponse {
+  _id: string;
+  count: number;
+}

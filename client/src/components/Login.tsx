@@ -2,11 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { loginFormData, loginSchema } from "../validations.ts/loginSchema";
-import type { AppDispatch } from "../store/store";
+import type { AppDispatch, RootState } from "../store/store";
 import { loginUser } from "../features/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { adminLogin } from "../features/adminSlice";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,14 +20,29 @@ export default function Login() {
   } = useForm<loginFormData>({
     resolver: zodResolver(loginSchema),
   });
+  const isAdminRoute = window.location.pathname.startsWith("/admin");
+  const isUserAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+  const isAdminAuthenticated = useSelector(
+    (state: RootState) => state.admin.isAuthenticated
+  );
+
+  useEffect(() => {
+    if (isAdminRoute && isAdminAuthenticated) {
+      navigate("/admin/dashboard", { replace: true });
+    } else if (!isAdminRoute && isUserAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isAdminRoute, isUserAuthenticated, isAdminAuthenticated, navigate]);
 
   const onSubmit = async (data: loginFormData) => {
-    const isAdminRoute = window.location.pathname.startsWith("/admin");
     if (isAdminRoute) {
       const resultAdmin = await dispatch(adminLogin(data));
-      if (loginUser.fulfilled.match(resultAdmin)) {
+      if (adminLogin.fulfilled.match(resultAdmin)) {
         toast.success(resultAdmin.payload.message);
-        navigate("/admin/dashboard");
+
+        navigate("/admin/dashboard", { replace: true });
       } else {
         toast.error(resultAdmin.payload!.message);
       }
@@ -33,7 +50,7 @@ export default function Login() {
       const result = await dispatch(loginUser(data));
       if (loginUser.fulfilled.match(result)) {
         toast.success(result.payload.message);
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       } else {
         toast.error(result.payload!.message);
       }

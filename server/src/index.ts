@@ -1,11 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors, { CorsOptions } from "cors";
-import connectDB from "./config/db";
-import userRouter from "./routes/userRoute";
-import adminRouter from "./routes/adminRoute";
 import { createServer } from "http";
-import { initializeSocket } from "./services/socketService";
+import { initializeSocket } from "./infrastructure/services/socketService";
+import adminRouter from "./presentation/routes/adminRoute";
+import connectDB from "./infrastructure/database/connectDB";
+import userRouter from "./presentation/routes/userRoute";
+import { taskRouter, adminTaskRouter } from "./presentation/routes/taskRoute";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,8 @@ app.use(express.json());
 
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
+app.use("/task", taskRouter);
+app.use("/admin/task", adminTaskRouter);
 
 const PORT = process.env.PORT || 3001;
 const server = createServer(app);

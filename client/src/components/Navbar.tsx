@@ -79,7 +79,6 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-sm px-4 py-3 md:px-6 md:py-4 font-['Poppins']">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo/Brand */}
         <div
           className="text-2xl md:text-3xl font-bold cursor-pointer flex items-center"
           onClick={() => navigate("/")}
@@ -88,10 +87,8 @@ const Navbar = () => {
           <span className="text-secondary">Tribe</span>
         </div>
 
-        {/* Navigation Items */}
         {isAuthenticated && (
           <div className="flex items-center space-x-4 md:space-x-6">
-            {/* Notifications */}
             <div className="relative" ref={notificationRef}>
               <button
                 onClick={toggleNotifications}
@@ -177,7 +174,6 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* User Menu */}
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={toggleUserMenu}
