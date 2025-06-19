@@ -125,7 +125,6 @@ const Dashboard = () => {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 font-['Poppins']">
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
           <h1 className="text-xl md:text-2xl font-semibold text-primary">
@@ -137,22 +136,9 @@ const Dashboard = () => {
           <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
             {userTasks.length} task{userTasks.length !== 1 ? "s" : ""}
           </div>
-
-          {/* Connection status */}
-          <div className="flex items-center">
-            <div
-              className={`w-2 h-2 rounded-full mr-2 ${
-                socket?.connected ? "bg-green-500 animate-pulse" : "bg-red-500"
-              }`}
-            ></div>
-            <span className="text-xs text-gray-500">
-              {socket?.connected ? "Live updates" : "Offline"}
-            </span>
-          </div>
         </div>
       </div>
 
-      {/* Error Display */}
       {error && (
         <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
           <div className="flex justify-between items-start">
@@ -182,7 +168,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Tasks Grid */}
       {userTasks.length === 0 ? (
         <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
           <svg

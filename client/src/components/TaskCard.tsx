@@ -96,7 +96,6 @@ const TaskCard = ({
 
   return (
     <>
-      {/* Task Card */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
         <div className="p-5">
           <div className="flex justify-between items-start mb-2">
@@ -157,11 +156,9 @@ const TaskCard = ({
         </div>
       </div>
 
-      {/* Task Details Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            {/* Background overlay */}
             <div
               className="fixed inset-0 transition-opacity"
               aria-hidden="true"
@@ -169,10 +166,8 @@ const TaskCard = ({
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
 
-            {/* Modal container */}
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
               <div className="bg-white px-6 py-4">
-                {/* Modal header */}
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-2xl font-bold text-primary">
@@ -204,9 +199,7 @@ const TaskCard = ({
                 </div>
               </div>
 
-              {/* Modal content */}
               <div className="px-6 py-4 space-y-6">
-                {/* Description */}
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 mb-2">
                     Description
@@ -218,7 +211,6 @@ const TaskCard = ({
                   </div>
                 </div>
 
-                {/* Due Date */}
                 {task.dueDate && (
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-2">
@@ -235,7 +227,6 @@ const TaskCard = ({
                   </div>
                 )}
 
-                {/* Subtasks */}
                 {task.subtasks && task.subtasks.length > 0 && (
                   <div>
                     <div className="flex justify-between items-center mb-4">
@@ -286,7 +277,6 @@ const TaskCard = ({
                 )}
               </div>
 
-              {/* Modal footer */}
               <div className="bg-gray-50 px-6 py-4 flex justify-end">
                 <button
                   onClick={() => setIsModalOpen(false)}
